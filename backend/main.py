@@ -18,6 +18,7 @@ from backend.database.seed_db import main as seed_database
 from backend.ml.forecasting import DemandForecaster
 from backend.ml.alerts_engine import EarlyWarningEngine, calculate_days_to_stockout
 from backend.ml.redistribution import RedistributionOptimizer
+from fl_simulation.server import FederatedServer
 from backend.schemas import (
     PHCBase,
     StockRecordBase,
@@ -215,16 +216,21 @@ def get_fl_status(db: Session = Depends(get_db)):
 
 @app.post("/api/fl/round")
 def trigger_fl_round(db: Session = Depends(get_db)):
-    """Simulate execution of a Flower FedAvg aggregation round."""
+    """Simulate execution of a Flower FedAvg aggregation round across BRICS nodes."""
+    server = FederatedServer()
+    res = server.run_fl_round()
+
     nodes = db.query(FLRoundModel).all()
     for node in nodes:
         node.local_loss = max(0.02, round(node.local_loss * 0.94, 4))
-        node.round_status = "Global Aggregation Completed"
+        node.round_status = f"FedAvg Round #{res['round_number']} Completed"
     db.commit()
+
     return {
         "status": "success",
-        "message": "FL Aggregation Round executed across BRICS nodes.",
-        "global_mae": 4.08
+        "round_number": res["round_number"],
+        "global_mae": res["aggregated_global_mae"],
+        "privacy_guarantee": res["privacy_guarantee"]
     }
 
 

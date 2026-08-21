@@ -84,14 +84,14 @@ This document outlines all technical tasks required beyond the frontend UI to co
 ---
 
 ## 🌐 Module 7: Federated Learning Simulation (`Flower`)
-- [ ] Set up Flower central aggregation server (`fl_simulation/server.py`) using `FedAvg` strategy
-- [ ] Build 3 simulated national node clients:
-  - [ ] `fl_simulation/india_client.py` (AIIMS Delhi / UP State Node)
-  - [ ] `fl_simulation/brazil_client.py` (Fiocruz Rio Node)
-  - [ ] `fl_simulation/south_africa_client.py` (SAMRC Cape Town Node)
-- [ ] Implement local training pipeline on node synthetic datasets (100% data privacy)
-- [ ] Implement model parameter serialization, weight aggregation, and global model broadcast
-- [ ] Build round-by-round MAE recording comparison (Local-only vs Federated Global model)
+- [x] Set up Flower central aggregation server (`fl_simulation/server.py`) using `FedAvg` strategy
+- [x] Build 3 simulated national node clients:
+  - [x] `fl_simulation/india_client.py` (AIIMS Delhi / UP State Node)
+  - [x] `fl_simulation/brazil_client.py` (Fiocruz Rio Node)
+  - [x] `fl_simulation/south_africa_client.py` (SAMRC Cape Town Node)
+- [x] Implement local training pipeline on node synthetic datasets (100% data privacy)
+- [x] Implement model parameter serialization, weight aggregation, and global model broadcast
+- [x] Build round-by-round MAE recording comparison (Local-only vs Federated Global model)
 
 ---
 
@@ -136,7 +136,7 @@ This document outlines all technical tasks required beyond the frontend UI to co
 | **Module 4: Forecasting ML** | Time-series Predictor & Confidence Bands | ✅ **Completed** |
 | **Module 5: Early Warning** | Stock-out Calculator & Severity Engine | ✅ **Completed** |
 | **Module 6: Optimization** | SciPy `linprog` Redistribution Solver | ✅ **Completed** |
-| **Module 7: Federated Learning** | Flower FedAvg Server & BRICS Nodes | 🔲 Pending |
+| **Module 7: Federated Learning** | Flower FedAvg Server & BRICS Nodes | ✅ **Completed** |
 | **Module 8: Outbreak Simulator** | Demand Spike Injection Controller | 🔲 Pending |
 | **Module 9: Testing Suite** | Pytest Unit & Integration Tests | 🔲 Pending |
 | **Module 10: Infrastructure** | Docker Compose & CI/CD Pipeline | 🔲 Pending |
