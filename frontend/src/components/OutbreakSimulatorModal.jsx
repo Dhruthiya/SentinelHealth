@@ -65,18 +65,34 @@ export default function OutbreakSimulatorModal({
         <div style={{ fontSize: '13px', color: 'var(--color-text-main)', lineHeight: '1.5', marginBottom: '20px' }}>
           {outbreakActive ? (
             <div style={{ padding: '12px', borderRadius: '6px', backgroundColor: 'var(--color-warning-bg)', border: '1px solid var(--color-warning-border)' }}>
-              <strong style={{ color: 'var(--color-warning)' }}>⚠️ Active Outbreak Scenario: Dengue Surge (District B)</strong>
+              <strong style={{ color: 'var(--color-warning)' }}>⚠️ ACTIVE OUTBREAK SCENARIO: Dengue Surge (District B)</strong>
               <div style={{ marginTop: '6px', fontSize: '12px', color: 'var(--color-text-main)' }}>
-                • Consumption rate for ORS Packets &amp; Paracetamol increased by <strong>3.2x</strong> at PHC 017 and PHC 055.
+                <strong>SYSTEM IMPACT:</strong>
                 <br />
-                • Early-warning engine generated 3 critical stock-out alerts.
+                • Patient footfall increased by <strong>+3.2x</strong> at PHC 017 and PHC 055
                 <br />
-                • SciPy optimization engine calculated redistribution transfers from PHC 042 &amp; PHC 062.
+                • Medicine demand (ORS, Paracetamol) surged beyond safety thresholds
+                <br />
+                • Bed occupancy rose to critical levels (88-92%)
+                <br />
+                <strong>PREDICTED RISKS:</strong>
+                <br />
+                • 3 PHCs at critical stock-out risk within 2-3 days
+                <br />
+                • 2 medicines projected to breach safety buffers
+                <br />
+                <strong>AI RESPONSE:</strong>
+                <br />
+                • Early-warning engine generated 3 critical alerts
+                <br />
+                • SciPy optimizer calculated 3 redistribution recommendations
+                <br />
+                • Projected resilience improvement: +15% after transfers
               </div>
             </div>
           ) : (
             <div style={{ padding: '12px', borderRadius: '6px', backgroundColor: 'var(--color-healthy-bg)', border: '1px solid var(--color-healthy-border)' }}>
-              <strong style={{ color: 'var(--color-healthy)' }}>✓ Normal Baseline State Active</strong>
+              <strong style={{ color: 'var(--color-healthy)' }}>✓ NORMAL BASELINE STATE ACTIVE</strong>
               <div style={{ marginTop: '4px', fontSize: '12px', color: 'var(--color-text-muted)' }}>
                 All PHCs operate under standard baseline demand. You can trigger a simulated outbreak below to evaluate system response.
               </div>

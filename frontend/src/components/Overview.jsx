@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   Building2, 
   AlertTriangle, 
@@ -11,7 +11,13 @@ import {
   ShieldAlert,
   ChevronRight,
   ExternalLink,
-  Info
+  Info,
+  Activity,
+  Users,
+  BedDouble,
+  TrendingUp,
+  Calendar,
+  MapPin
 } from 'lucide-react';
 import PhcMap from './PhcMap';
 
@@ -33,71 +39,224 @@ export default function Overview({
   const criticalAlerts = alerts.filter(a => a.severity === 'CRITICAL');
   const pendingTransfers = transfers.filter(t => t.status === 'PENDING');
   const criticalPhcCount = filteredPhcs.filter(p => p.status === 'CRITICAL').length;
+  const warningPhcCount = filteredPhcs.filter(p => p.status === 'WARNING').length;
+  const healthyPhcCount = filteredPhcs.filter(p => p.status === 'HEALTHY').length;
+
+  // Calculate National Health Resilience Score
+  const resilienceScore = useMemo(() => {
+    const totalPhcs = filteredPhcs.length;
+    if (totalPhcs === 0) return 0;
+    
+    // Factors: Healthy PHCs (40%), Staff attendance (25%), Bed capacity (20%), Medicine availability (15%)
+    const healthyRatio = healthyPhcCount / totalPhcs;
+    const avgStaffAttendance = filteredPhcs.reduce((sum, p) => sum + (p.staffPresent / p.staffScheduled), 0) / totalPhcs;
+    const avgBedOccupancy = filteredPhcs.reduce((sum, p) => sum + (p.bedsOccupied / p.bedsTotal), 0) / totalPhcs;
+    const medicineHealth = 1 - (criticalAlerts.length / Math.max(1, totalPhcs * 2)); // Assuming ~2 medicines per PHC
+    
+    const score = (healthyRatio * 40) + (avgStaffAttendance * 25) + ((1 - avgBedOccupancy) * 20) + (medicineHealth * 15);
+    return Math.round(Math.max(0, Math.min(100, score)));
+  }, [filteredPhcs, healthyPhcCount, criticalAlerts]);
+
+  // Determine system status
+  const systemStatus = useMemo(() => {
+    if (resilienceScore >= 75) return { status: 'STABLE', color: 'var(--color-healthy)', bg: 'var(--color-healthy-bg)' };
+    if (resilienceScore >= 50) return { status: 'AT RISK', color: 'var(--color-warning)', bg: 'var(--color-warning-bg)' };
+    return { status: 'CRITICAL', color: 'var(--color-critical)', bg: 'var(--color-critical-bg)' };
+  }, [resilienceScore]);
+
+  // Calculate aggregate metrics
+  const totalBeds = filteredPhcs.reduce((sum, p) => sum + p.bedsTotal, 0);
+  const occupiedBeds = filteredPhcs.reduce((sum, p) => sum + p.bedsOccupied, 0);
+  const totalStaff = filteredPhcs.reduce((sum, p) => sum + p.staffScheduled, 0);
+  const presentStaff = filteredPhcs.reduce((sum, p) => sum + p.staffPresent, 0);
+  const totalPopulation = filteredPhcs.reduce((sum, p) => sum + p.population, 0);
+  const currentPatientFootfall = filteredPhcs.reduce((sum, p) => sum + (p.patientFootfall || 0), 0);
+  const forecastedPatientFootfall = filteredPhcs.reduce((sum, p) => sum + (p.forecastedFootfall || 0), 0);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       
-      {/* KPI Cards Grid */}
-      <div className="grid-4">
-        {/* KPI 1: Monitored PHCs */}
-        <div className="sh-card" style={{ borderLeft: '4px solid var(--color-primary)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <div>
-              <div className="sh-card-subtitle">Monitored Facilities</div>
-              <div style={{ fontSize: '24px', fontWeight: '700', color: 'var(--color-text-main)', marginTop: '4px' }}>
-                {filteredPhcs.length} <span style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontWeight: '400' }}>/ 142 PHCs</span>
+      {/* National Health Resilience Status Banner */}
+      <div className="sh-card" style={{ 
+        background: `linear-gradient(135deg, ${systemStatus.bg} 0%, #FFFFFF 100%)`,
+        borderLeft: `6px solid ${systemStatus.color}`,
+        padding: '24px'
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <div style={{ fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-muted)', marginBottom: '8px' }}>
+              National Health Resilience Status
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div style={{ fontSize: '36px', fontWeight: '800', color: systemStatus.color, lineHeight: '1' }}>
+                {systemStatus.status}
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <div style={{ fontSize: '14px', color: 'var(--color-text-main)', fontWeight: '600' }}>
+                  Resilience Score: <span style={{ fontSize: '24px', fontWeight: '700', color: systemStatus.color }}>{resilienceScore}</span> / 100
+                </div>
+                <div style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
+                  Based on {filteredPhcs.length} PHCs • {criticalPhcCount} Critical • {warningPhcCount} At Risk
+                </div>
               </div>
             </div>
-            <div style={{ padding: '8px', borderRadius: '6px', backgroundColor: 'var(--color-primary-light)', color: 'var(--color-primary)' }}>
-              <Building2 size={20} />
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontSize: '11px', color: 'var(--color-text-muted)', marginBottom: '4px' }}>Serving Population</div>
+            <div style={{ fontSize: '20px', fontWeight: '700', color: 'var(--color-text-main)' }}>
+              {totalPopulation.toLocaleString()}
             </div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px', fontSize: '12px' }}>
-            <span className="badge badge-critical">{criticalPhcCount} Critical</span>
-            <span style={{ color: 'var(--color-text-muted)' }}>100% telemetry online</span>
+        </div>
+      </div>
+
+      {/* Critical Risks Section - PROMINENT */}
+      {criticalAlerts.length > 0 && (
+        <div className="sh-card" style={{ border: '2px solid var(--color-critical)', backgroundColor: 'var(--color-critical-bg)' }}>
+          <div className="sh-card-header" style={{ borderBottom: '1px solid var(--color-critical-border)', paddingBottom: '12px' }}>
+            <div className="sh-card-title" style={{ color: 'var(--color-critical)' }}>
+              <AlertTriangle size={18} />
+              <span>CRITICAL RISKS — Immediate Action Required</span>
+            </div>
+            <button className="btn btn-outline btn-sm" onClick={() => onNavigate('alerts')} style={{ borderColor: 'var(--color-critical)', color: 'var(--color-critical)' }}>
+              View All ({criticalAlerts.length})
+            </button>
+          </div>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(3, criticalAlerts.length)}, 1fr)`, gap: '16px', marginTop: '16px' }}>
+            {criticalAlerts.slice(0, 3).map((alert) => (
+              <div key={alert.id} style={{ 
+                padding: '16px', 
+                backgroundColor: '#FFFFFF', 
+                borderRadius: '8px', 
+                border: '1px solid var(--color-critical-border)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px'
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '11px', fontWeight: '700', color: 'var(--color-text-muted)' }}>{alert.phcName}</span>
+                  <span style={{ fontSize: '32px', fontWeight: '800', color: 'var(--color-critical)', lineHeight: '1' }}>
+                    {alert.daysToStockout}
+                  </span>
+                </div>
+                <div style={{ fontSize: '13px', fontWeight: '600', color: 'var(--color-text-main)' }}>
+                  {alert.medicineName}
+                </div>
+                <div style={{ fontSize: '11px', color: 'var(--color-critical)', fontWeight: '600' }}>
+                  DAYS TO STOCK-OUT
+                </div>
+                <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginTop: '4px' }}>
+                  {alert.message}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
+      )}
 
-        {/* KPI 2: Stock-outs Predicted */}
+      {/* KPI Cards Grid - REORGANIZED FOR OPERATIONAL HIERARCHY */}
+      <div className="grid-4">
+        {/* KPI 1: Medicine Availability (Most Operationally Important) */}
         <div className="sh-card" style={{ borderLeft: '4px solid var(--color-critical)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
-              <div className="sh-card-subtitle">Stock-Outs Predicted (&lt; 7 Days)</div>
-              <div style={{ fontSize: '24px', fontWeight: '700', color: 'var(--color-critical)', marginTop: '4px' }}>
-                {criticalAlerts.length} <span style={{ fontSize: '13px', fontWeight: '500' }}>Medicines</span>
+              <div className="sh-card-subtitle">Medicines at Risk</div>
+              <div style={{ fontSize: '28px', fontWeight: '700', color: 'var(--color-critical)', marginTop: '4px' }}>
+                {criticalAlerts.length}
               </div>
             </div>
             <div style={{ padding: '8px', borderRadius: '6px', backgroundColor: 'var(--color-critical-bg)', color: 'var(--color-critical)' }}>
-              <TrendingDown size={20} />
+              <AlertTriangle size={20} />
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '12px', fontSize: '12px', color: 'var(--color-critical)' }}>
-            <AlertTriangle size={13} />
-            <span>Shortage lead time: 2.4 - 3.8 days</span>
+            <TrendingDown size={13} />
+            <span>Stock-outs predicted in 2-3 days</span>
           </div>
         </div>
 
-        {/* KPI 3: Pending Transfers */}
+        {/* KPI 2: Bed Capacity */}
         <div className="sh-card" style={{ borderLeft: '4px solid var(--color-warning)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
-              <div className="sh-card-subtitle">SciPy Optimized Transfers</div>
+              <div className="sh-card-subtitle">Bed Capacity</div>
               <div style={{ fontSize: '24px', fontWeight: '700', color: 'var(--color-text-main)', marginTop: '4px' }}>
-                {pendingTransfers.length} <span style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontWeight: '400' }}>Awaiting Approval</span>
+                {occupiedBeds} <span style={{ fontSize: '14px', color: 'var(--color-text-muted)', fontWeight: '400' }}>/ {totalBeds}</span>
               </div>
             </div>
             <div style={{ padding: '8px', borderRadius: '6px', backgroundColor: 'var(--color-warning-bg)', color: 'var(--color-warning)' }}>
-              <Truck size={20} />
+              <BedDouble size={20} />
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '12px', fontSize: '12px', color: 'var(--color-text-muted)' }}>
-            <CheckCircle2 size={13} style={{ color: 'var(--color-healthy)' }} />
-            <span>Human-in-the-loop validation active</span>
+            <span>{Math.round((occupiedBeds / totalBeds) * 100)}% occupancy</span>
+            <span style={{ color: 'var(--color-warning)' }}>High utilization</span>
           </div>
         </div>
 
-        {/* KPI 4: Federated Learning Status */}
+        {/* KPI 3: Staff Availability */}
+        <div className="sh-card" style={{ borderLeft: '4px solid var(--color-primary)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div>
+              <div className="sh-card-subtitle">Staff On Duty</div>
+              <div style={{ fontSize: '24px', fontWeight: '700', color: 'var(--color-text-main)', marginTop: '4px' }}>
+                {presentStaff} <span style={{ fontSize: '14px', color: 'var(--color-text-muted)', fontWeight: '400' }}>/ {totalStaff}</span>
+              </div>
+            </div>
+            <div style={{ padding: '8px', borderRadius: '6px', backgroundColor: 'var(--color-primary-light)', color: 'var(--color-primary)' }}>
+              <Users size={20} />
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '12px', fontSize: '12px', color: 'var(--color-text-muted)' }}>
+            <span>{Math.round((presentStaff / totalStaff) * 100)}% attendance</span>
+            <span style={{ color: 'var(--color-healthy)' }}>Normal levels</span>
+          </div>
+        </div>
+
+        {/* KPI 4: Patient Footfall - FIRST CLASS METRIC */}
+        <div className="sh-card" style={{ borderLeft: '4px solid var(--color-primary)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div>
+              <div className="sh-card-subtitle">Patient Footfall</div>
+              <div style={{ fontSize: '24px', fontWeight: '700', color: 'var(--color-text-main)', marginTop: '4px' }}>
+                {currentPatientFootfall} <span style={{ fontSize: '14px', color: 'var(--color-text-muted)', fontWeight: '400' }}>patients/day</span>
+              </div>
+            </div>
+            <div style={{ padding: '8px', borderRadius: '6px', backgroundColor: 'var(--color-primary-light)', color: 'var(--color-primary)' }}>
+              <Users size={20} />
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '12px', fontSize: '12px', color: 'var(--color-text-muted)' }}>
+            <TrendingUp size={13} style={{ color: 'var(--color-warning)' }} />
+            <span>Forecast: <strong>{forecastedPatientFootfall}</strong> (+{Math.round(((forecastedPatientFootfall - currentPatientFootfall) / currentPatientFootfall) * 100)}%)</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Secondary KPI Row */}
+      <div className="grid-2">
+        {/* Pending Actions */}
         <div className="sh-card" style={{ borderLeft: '4px solid var(--color-info)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div>
+              <div className="sh-card-subtitle">Actions Required</div>
+              <div style={{ fontSize: '24px', fontWeight: '700', color: 'var(--color-text-main)', marginTop: '4px' }}>
+                {pendingTransfers.length}
+              </div>
+            </div>
+            <div style={{ padding: '8px', borderRadius: '6px', backgroundColor: 'var(--color-info-bg)', color: 'var(--color-info)' }}>
+              <Clock size={20} />
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '12px', fontSize: '12px', color: 'var(--color-text-muted)' }}>
+            <Truck size={13} />
+            <span>Redistribution approvals pending</span>
+          </div>
+        </div>
+
+        {/* Federated Learning Status */}
+        <div className="sh-card" style={{ borderLeft: '4px solid var(--color-primary)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
               <div className="sh-card-subtitle">BRICS Federated Model</div>
@@ -246,6 +405,41 @@ export default function Overview({
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* AI Decision Timeline */}
+          <div className="sh-card" style={{ padding: '16px' }}>
+            <div style={{ fontSize: '12px', fontWeight: '700', color: 'var(--color-text-main)', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Activity size={14} style={{ color: 'var(--color-primary)' }} />
+              AI DECISION TIMELINE
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px' }}>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--color-critical)' }}></div>
+                <span style={{ color: 'var(--color-text-muted)' }}>Stock-out risk detected</span>
+                <span style={{ marginLeft: 'auto', color: 'var(--color-text-muted)' }}>2 min ago</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px' }}>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--color-warning)' }}></div>
+                <span style={{ color: 'var(--color-text-muted)' }}>Demand forecast generated</span>
+                <span style={{ marginLeft: 'auto', color: 'var(--color-text-muted)' }}>4 min ago</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px' }}>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--color-primary)' }}></div>
+                <span style={{ color: 'var(--color-text-muted)' }}>Source PHCs identified</span>
+                <span style={{ marginLeft: 'auto', color: 'var(--color-text-muted)' }}>5 min ago</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px' }}>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--color-info)' }}></div>
+                <span style={{ color: 'var(--color-text-muted)' }}>Redistribution recommendation generated</span>
+                <span style={{ marginLeft: 'auto', color: 'var(--color-text-muted)' }}>6 min ago</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px' }}>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--color-healthy)' }}></div>
+                <span style={{ color: 'var(--color-text-muted)' }}>Awaiting human approval</span>
+                <span style={{ marginLeft: 'auto', color: 'var(--color-healthy)', fontWeight: '600' }}>NOW</span>
+              </div>
             </div>
           </div>
 

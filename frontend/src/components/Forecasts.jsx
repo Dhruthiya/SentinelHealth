@@ -102,28 +102,8 @@ export default function Forecasts({ timeSeriesData, phcs, inventory }) {
         </div>
       </div>
 
-      {/* Model Performance Statistics Bar */}
+      {/* Operational Forecast Summary */}
       <div className="grid-4">
-        <div className="sh-card" style={{ padding: '14px 16px' }}>
-          <div className="sh-card-subtitle">MODEL EVALUATION METRIC</div>
-          <div style={{ fontSize: '20px', fontWeight: '700', color: 'var(--color-primary)', marginTop: '2px' }}>
-            MAE: 3.42 <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', fontWeight: '400' }}>units</span>
-          </div>
-          <div style={{ fontSize: '11px', color: 'var(--color-healthy)', marginTop: '4px', fontWeight: '500' }}>
-            -34% Error vs prophet baseline
-          </div>
-        </div>
-
-        <div className="sh-card" style={{ padding: '14px 16px' }}>
-          <div className="sh-card-subtitle">ROOT MEAN SQUARED ERROR</div>
-          <div style={{ fontSize: '20px', fontWeight: '700', color: 'var(--color-text-main)', marginTop: '2px' }}>
-            RMSE: 4.81 <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', fontWeight: '400' }}>units</span>
-          </div>
-          <div style={{ fontSize: '11px', color: 'var(--color-text-muted)', marginTop: '4px' }}>
-            Low variance across 30 days
-          </div>
-        </div>
-
         <div className="sh-card" style={{ padding: '14px 16px' }}>
           <div className="sh-card-subtitle">PREDICTED STOCK-OUT DATE</div>
           <div style={{ fontSize: '20px', fontWeight: '700', color: 'var(--color-critical)', marginTop: '2px' }}>
@@ -135,6 +115,26 @@ export default function Forecasts({ timeSeriesData, phcs, inventory }) {
         </div>
 
         <div className="sh-card" style={{ padding: '14px 16px' }}>
+          <div className="sh-card-subtitle">FORECASTED DEMAND</div>
+          <div style={{ fontSize: '20px', fontWeight: '700', color: 'var(--color-text-main)', marginTop: '2px' }}>
+            +127 <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', fontWeight: '400' }}>units/week</span>
+          </div>
+          <div style={{ fontSize: '11px', color: 'var(--color-warning)', marginTop: '4px', fontWeight: '500' }}>
+            +27% increase vs baseline
+          </div>
+        </div>
+
+        <div className="sh-card" style={{ padding: '14px 16px' }}>
+          <div className="sh-card-subtitle">WHY DEMAND CHANGING</div>
+          <div style={{ fontSize: '13px', fontWeight: '600', color: 'var(--color-text-main)', marginTop: '2px' }}>
+            Patient footfall spike
+          </div>
+          <div style={{ fontSize: '11px', color: 'var(--color-text-muted)', marginTop: '4px' }}>
+            Dengue outbreak cluster (District B)
+          </div>
+        </div>
+
+        <div className="sh-card" style={{ padding: '14px 16px' }}>
           <div className="sh-card-subtitle">MODEL SOURCE</div>
           <div style={{ fontSize: '16px', fontWeight: '700', color: 'var(--color-info)', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '6px' }}>
             <ShieldCheck size={16} /> FedAvg Global Model
@@ -142,6 +142,33 @@ export default function Forecasts({ timeSeriesData, phcs, inventory }) {
           <div style={{ fontSize: '11px', color: 'var(--color-text-muted)', marginTop: '4px' }}>
             Collaborative BRICS weights
           </div>
+        </div>
+      </div>
+
+      {/* Technical Model Metrics (Secondary) */}
+      <div className="grid-3">
+        <div className="sh-card" style={{ padding: '12px 16px', backgroundColor: 'var(--color-bg-subtle)' }}>
+          <div className="sh-card-subtitle">MODEL MAE</div>
+          <div style={{ fontSize: '16px', fontWeight: '600', color: 'var(--color-text-main)', marginTop: '2px' }}>
+            3.42 units
+          </div>
+          <div style={{ fontSize: '10px', color: 'var(--color-text-muted)' }}>-34% vs baseline</div>
+        </div>
+
+        <div className="sh-card" style={{ padding: '12px 16px', backgroundColor: 'var(--color-bg-subtle)' }}>
+          <div className="sh-card-subtitle">MODEL RMSE</div>
+          <div style={{ fontSize: '16px', fontWeight: '600', color: 'var(--color-text-main)', marginTop: '2px' }}>
+            4.81 units
+          </div>
+          <div style={{ fontSize: '10px', color: 'var(--color-text-muted)' }}>Low variance</div>
+        </div>
+
+        <div className="sh-card" style={{ padding: '12px 16px', backgroundColor: 'var(--color-bg-subtle)' }}>
+          <div className="sh-card-subtitle">CONFIDENCE INTERVAL</div>
+          <div style={{ fontSize: '16px', fontWeight: '600', color: 'var(--color-text-main)', marginTop: '2px' }}>
+            95%
+          </div>
+          <div style={{ fontSize: '10px', color: 'var(--color-text-muted)' }}>Statistical bounds</div>
         </div>
       </div>
 

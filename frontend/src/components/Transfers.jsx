@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { 
   Truck, 
   ArrowRight, 
+  ArrowDown,
   CheckCircle2, 
   Clock, 
   MapPin, 
@@ -71,7 +72,7 @@ export default function Transfers({ transfers, onApproveTransfer }) {
 
         {pendingTransfers.length > 0 ? (
           pendingTransfers.map(trf => (
-            <div key={trf.id} className="sh-card" style={{ border: '1px solid var(--color-border)' }}>
+            <div key={trf.id} className="sh-card" style={{ border: '2px solid var(--color-warning-border)', backgroundColor: '#FFFDF5' }}>
               <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: '20px' }}>
                 
                 <div style={{ flex: 1 }}>
@@ -88,41 +89,99 @@ export default function Transfers({ transfers, onApproveTransfer }) {
                   </div>
 
                   <h3 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--color-text-main)' }}>
-                    Transfer {trf.quantity} units of <span style={{ color: 'var(--color-primary)' }}>{trf.medicineName}</span>
+                    AI Recommendation: Transfer {trf.quantity} units of <span style={{ color: 'var(--color-primary)' }}>{trf.medicineName}</span>
                   </h3>
 
-                  {/* Source -> Destination Visual Block */}
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '16px',
-                    backgroundColor: 'var(--color-bg-canvas)',
-                    padding: '12px 16px',
-                    borderRadius: '8px',
-                    border: '1px solid var(--color-border)',
-                    margin: '12px 0'
-                  }}>
-                    <div>
-                      <div style={{ fontSize: '10px', fontWeight: '700', color: 'var(--color-text-muted)', letterSpacing: '0.05em' }}>SOURCE (SURPLUS AVAILABLE)</div>
-                      <div style={{ fontSize: '14px', fontWeight: '700', color: 'var(--color-text-main)' }}>{trf.sourcePhcName}</div>
-                      <div style={{ fontSize: '11px', color: 'var(--color-healthy)', fontWeight: '500' }}>Surplus: {trf.sourceSurplus} units</div>
+                  {/* PROBLEM -> SOLUTION -> IMPACT FLOW */}
+                  <div style={{ marginTop: '16px' }}>
+                    {/* BEFORE: Problem */}
+                    <div style={{ 
+                      padding: '12px', 
+                      borderRadius: '6px', 
+                      backgroundColor: 'var(--color-critical-bg)', 
+                      border: '1px solid var(--color-critical-border)',
+                      marginBottom: '12px'
+                    }}>
+                      <div style={{ fontSize: '11px', fontWeight: '700', color: 'var(--color-critical)', marginBottom: '4px' }}>
+                        PROBLEM: PREDICTED SHORTAGE
+                      </div>
+                      <div style={{ fontSize: '13px', color: 'var(--color-text-main)' }}>
+                        <strong>{trf.destPhcName}</strong> will run out in <strong style={{ color: 'var(--color-critical)' }}>{trf.destShortageDays} days</strong>
+                      </div>
                     </div>
 
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '0 8px' }}>
-                      <ArrowRight size={20} style={{ color: 'var(--color-primary)' }} />
-                      <div style={{ fontSize: '10px', color: 'var(--color-text-muted)', marginTop: '2px' }}>{trf.distanceKm} km</div>
+                    {/* ARROW */}
+                    <div style={{ display: 'flex', justifyContent: 'center', margin: '8px 0' }}>
+                      <ArrowDown size={20} style={{ color: 'var(--color-primary)' }} />
                     </div>
 
-                    <div>
-                      <div style={{ fontSize: '10px', fontWeight: '700', color: 'var(--color-text-muted)', letterSpacing: '0.05em' }}>DESTINATION (PREDICTED SHORTAGE)</div>
-                      <div style={{ fontSize: '14px', fontWeight: '700', color: 'var(--color-critical)' }}>{trf.destPhcName}</div>
-                      <div style={{ fontSize: '11px', color: 'var(--color-critical)', fontWeight: '500' }}>Shortage in: {trf.destShortageDays} days</div>
+                    {/* SOLUTION: Source -> Destination */}
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '16px',
+                      backgroundColor: 'var(--color-bg-canvas)',
+                      padding: '12px 16px',
+                      borderRadius: '8px',
+                      border: '1px solid var(--color-border)',
+                      margin: '12px 0'
+                    }}>
+                      <div>
+                        <div style={{ fontSize: '10px', fontWeight: '700', color: 'var(--color-text-muted)', letterSpacing: '0.05em' }}>SOURCE (SURPLUS)</div>
+                        <div style={{ fontSize: '14px', fontWeight: '700', color: 'var(--color-text-main)' }}>{trf.sourcePhcName}</div>
+                        <div style={{ fontSize: '11px', color: 'var(--color-healthy)', fontWeight: '500' }}>Available: {trf.sourceSurplus} units</div>
+                      </div>
+
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '0 8px' }}>
+                        <ArrowRight size={20} style={{ color: 'var(--color-primary)' }} />
+                        <div style={{ fontSize: '10px', color: 'var(--color-text-muted)', marginTop: '2px' }}>{trf.distanceKm} km</div>
+                      </div>
+
+                      <div>
+                        <div style={{ fontSize: '10px', fontWeight: '700', color: 'var(--color-text-muted)', letterSpacing: '0.05em' }}>DESTINATION (SHORTAGE)</div>
+                        <div style={{ fontSize: '14px', fontWeight: '700', color: 'var(--color-critical)' }}>{trf.destPhcName}</div>
+                        <div style={{ fontSize: '11px', color: 'var(--color-critical)', fontWeight: '500' }}>Transfer: {trf.quantity} units</div>
+                      </div>
+                    </div>
+
+                    {/* ARROW */}
+                    <div style={{ display: 'flex', justifyContent: 'center', margin: '8px 0' }}>
+                      <ArrowDown size={20} style={{ color: 'var(--color-primary)' }} />
+                    </div>
+
+                    {/* AFTER: Projected Impact */}
+                    <div style={{ 
+                      padding: '12px', 
+                      borderRadius: '6px', 
+                      backgroundColor: 'var(--color-healthy-bg)', 
+                      border: '1px solid var(--color-healthy-border)'
+                    }}>
+                      <div style={{ fontSize: '11px', fontWeight: '700', color: 'var(--color-healthy)', marginBottom: '4px' }}>
+                        PROJECTED IMPACT AFTER TRANSFER
+                      </div>
+                      <div style={{ fontSize: '13px', color: 'var(--color-text-main)' }}>
+                        <strong>{trf.destPhcName}</strong> stock-out risk extended by <strong style={{ color: 'var(--color-healthy)' }}>+{Math.round(trf.quantity / (trf.destShortageDays * 10))} days</strong>
+                      </div>
+                      <div style={{ fontSize: '11px', color: 'var(--color-text-muted)', marginTop: '4px' }}>
+                        {trf.impactMessage} (Transit: ~{trf.estTimeMins} mins)
+                      </div>
                     </div>
                   </div>
 
-                  <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', display: 'flex', gap: '16px' }}>
-                    <span>Estimated transit: <strong>~{trf.estTimeMins} mins</strong></span>
-                    <span>Outcome: <strong style={{ color: 'var(--color-healthy)' }}>{trf.impactMessage}</strong></span>
+                  {/* Human-in-the-Loop Workflow */}
+                  <div style={{ 
+                    marginTop: '16px', 
+                    padding: '8px 12px', 
+                    borderRadius: '4px', 
+                    backgroundColor: 'var(--color-info-bg)', 
+                    border: '1px solid var(--color-info-border)',
+                    fontSize: '11px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}>
+                    <UserCheck size={12} style={{ color: 'var(--color-info)' }} />
+                    <span><strong>Human-in-the-Loop:</strong> Requires your authorization before physical dispatch</span>
                   </div>
                 </div>
 

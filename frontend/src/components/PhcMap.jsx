@@ -11,7 +11,8 @@ import {
   Filter,
   Package,
   TrendingUp,
-  CheckCircle2
+  CheckCircle2,
+  Activity
 } from 'lucide-react';
 
 export default function PhcMap({ phcs, selectedPhc, setSelectedPhc, isEmbedded = false }) {
@@ -247,6 +248,9 @@ export default function PhcMap({ phcs, selectedPhc, setSelectedPhc, isEmbedded =
               <div style={{ fontSize: '15px', fontWeight: '700', marginTop: '2px' }}>
                 {selectedPhc.bedsOccupied} / {selectedPhc.bedsTotal}
               </div>
+              <div style={{ fontSize: '10px', color: 'var(--color-text-muted)', marginTop: '2px' }}>
+                {Math.round((selectedPhc.bedsOccupied / selectedPhc.bedsTotal) * 100)}% capacity
+              </div>
             </div>
 
             <div style={{ padding: '10px', backgroundColor: 'var(--color-bg-subtle)', borderRadius: '6px' }}>
@@ -256,6 +260,33 @@ export default function PhcMap({ phcs, selectedPhc, setSelectedPhc, isEmbedded =
               <div style={{ fontSize: '15px', fontWeight: '700', marginTop: '2px' }}>
                 {selectedPhc.staffPresent} / {selectedPhc.staffScheduled}
               </div>
+              <div style={{ fontSize: '10px', color: 'var(--color-text-muted)', marginTop: '2px' }}>
+                {Math.round((selectedPhc.staffPresent / selectedPhc.staffScheduled) * 100)}% attendance
+              </div>
+            </div>
+
+            <div style={{ padding: '10px', backgroundColor: 'var(--color-bg-subtle)', borderRadius: '6px' }}>
+              <div style={{ fontSize: '11px', color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <TrendingUp size={12} /> Patient Footfall
+              </div>
+              <div style={{ fontSize: '15px', fontWeight: '700', marginTop: '2px' }}>
+                {selectedPhc.patientFootfall || 0}
+              </div>
+              <div style={{ fontSize: '10px', color: selectedPhc.patientFootfallTrend?.includes('+') ? 'var(--color-warning)' : 'var(--color-healthy)', marginTop: '2px' }}>
+                {selectedPhc.patientFootfallTrend || '+5%'} vs baseline
+              </div>
+            </div>
+
+            <div style={{ padding: '10px', backgroundColor: 'var(--color-bg-subtle)', borderRadius: '6px' }}>
+              <div style={{ fontSize: '11px', color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <Package size={12} /> Population Served
+              </div>
+              <div style={{ fontSize: '15px', fontWeight: '700', marginTop: '2px' }}>
+                {selectedPhc.population?.toLocaleString() || 'N/A'}
+              </div>
+              <div style={{ fontSize: '10px', color: 'var(--color-text-muted)', marginTop: '2px' }}>
+                Catchment area
+              </div>
             </div>
           </div>
 
@@ -264,7 +295,7 @@ export default function PhcMap({ phcs, selectedPhc, setSelectedPhc, isEmbedded =
             <div style={{ fontSize: '12px', fontWeight: '600', color: 'var(--color-text-main)', marginBottom: '8px' }}>
               Facility Resource Alerts
             </div>
-            {selectedPhc.criticalMedicines.length > 0 ? (
+            {selectedPhc.criticalMedicines && selectedPhc.criticalMedicines.length > 0 ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {selectedPhc.criticalMedicines.map(med => (
                   <div key={med} style={{
@@ -290,6 +321,24 @@ export default function PhcMap({ phcs, selectedPhc, setSelectedPhc, isEmbedded =
               </div>
             )}
           </div>
+
+          {/* AI Recommendation for this PHC */}
+          {selectedPhc.status === 'CRITICAL' && (
+            <div style={{ 
+              padding: '12px', 
+              borderRadius: '6px', 
+              backgroundColor: 'var(--color-warning-bg)', 
+              border: '1px solid var(--color-warning-border)',
+              fontSize: '11px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px', fontWeight: '600', color: 'var(--color-warning)' }}>
+                <Activity size={12} /> AI RECOMMENDATION
+              </div>
+              <div style={{ color: 'var(--color-text-main)' }}>
+                Cross-district transfer recommended from nearest surplus PHC. Estimated transit time: 35-45 mins.
+              </div>
+            </div>
+          )}
 
           <div style={{ marginTop: 'auto', paddingTop: '16px', borderTop: '1px solid var(--color-border)' }}>
             <button className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>

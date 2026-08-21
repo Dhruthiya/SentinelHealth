@@ -23,44 +23,36 @@ The **SentinelHealth** platform and documentation adhere to a strict, high-trust
 
 Healthcare facilities can face medicine shortages because demand fluctuates, inventory is fragmented, and supply-chain decisions are often reactive.
 
-
 **SentinelHealth** transforms healthcare resource data into predictive and actionable intelligence by combining demand forecasting, stock-out prediction, early-warning alerts, optimization, and federated learning.
 
 The platform enables healthcare administrators to:
 
-- Monitor Primary Health Centres (PHCs)
-- Track medicine inventory
-- Forecast future demand
-- Predict potential stock-outs
+- Monitor Primary Health Centres (PHCs) and national health resilience
+- Track medicine inventory, bed capacity, and personnel availability
+- Monitor patient footfall and demand patterns
+- Forecast future demand with transparent reasoning
+- Predict potential stock-outs with clear timelines
 - Detect abnormal demand spikes
-- Recommend medicine redistribution
-- Simulate outbreak scenarios
+- Recommend medicine redistribution with before/after impact analysis
+- Simulate outbreak scenarios and projected system response
 - Demonstrate privacy-aware collaborative ML through Federated Learning
+- Follow clear MONITOR → PREDICT → RESPOND → COLLABORATE workflow
 
 ```text
 PHC / HEALTHCARE DATA
         │
         ▼
-1. DATA INGESTION ──────▶ PHC, inventory & demand data
+1. MONITOR ──────▶ PHC status, inventory, beds, staff, patient footfall
         │
         ▼
-2. AI FORECASTING ──────▶ Future medicine demand
+2. PREDICT ──────▶ AI demand forecasting, stock-out risk detection
         │
         ▼
-3. STOCK-OUT PREDICTION ▶ Days-to-stock-out + risk level
+3. RESPOND ──────▶ AI redistribution recommendations, human approval
         │
         ▼
-4. EARLY WARNING ───────▶ Critical / High / Medium / Low alerts
-        │
-        ▼
-5. OPTIMIZATION ────────▶ Recommended medicine redistribution
-        │
-        ▼
-6. HUMAN REVIEW ────────▶ Administrator approval
-        │
-        ▼
-7. FEDERATED LEARNING ──▶ Collaborative model training
-````
+4. COLLABORATE ──▶ Federated learning across BRICS nations
+```
 
 ---
 

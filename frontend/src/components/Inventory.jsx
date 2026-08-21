@@ -105,11 +105,11 @@ export default function Inventory({ inventory, onNavigateToForecast }) {
               <tr>
                 <th>Facility (PHC)</th>
                 <th>Medicine &amp; Category</th>
-                <th>Batch &amp; Expiry</th>
                 <th>Current Stock</th>
                 <th>Daily Consumption</th>
-                <th>Stock Autonomy</th>
-                <th>Status</th>
+                <th>Days Remaining</th>
+                <th>Stock-Out Risk</th>
+                <th>Predicted Demand</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -117,6 +117,7 @@ export default function Inventory({ inventory, onNavigateToForecast }) {
               {filteredInventory.map((item) => {
                 const isCritical = item.status === 'CRITICAL';
                 const isWarning = item.status === 'WARNING';
+                const predictedDemand = Math.round(item.dailyConsumption * 7); // Weekly prediction
                 
                 return (
                   <tr key={item.id}>
@@ -130,12 +131,6 @@ export default function Inventory({ inventory, onNavigateToForecast }) {
                     <td>
                       <div style={{ fontWeight: '600', color: 'var(--color-text-main)' }}>{item.medicineName}</div>
                       <div style={{ fontSize: '11px', color: 'var(--color-text-muted)' }}>{item.category}</div>
-                    </td>
-
-                    {/* Batch & Expiry */}
-                    <td>
-                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12px' }}>{item.batchNo}</div>
-                      <div style={{ fontSize: '11px', color: 'var(--color-text-muted)' }}>Exp: {item.expiryDate}</div>
                     </td>
 
                     {/* Current Stock */}
@@ -155,11 +150,13 @@ export default function Inventory({ inventory, onNavigateToForecast }) {
                       </div>
                     </td>
 
-                    {/* Stock Autonomy (Days Remaining Gauge) */}
-                    <td style={{ minWidth: '160px' }}>
+                    {/* Days Remaining - MOST PROMINENT */}
+                    <td style={{ minWidth: '140px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: '600', marginBottom: '4px' }}>
-                        <span>{item.daysRemaining} Days</span>
-                        <span style={{ color: 'var(--color-text-muted)', fontSize: '10px' }}>Remaining</span>
+                        <span style={{ fontSize: '16px', fontWeight: '800', color: isCritical ? 'var(--color-critical)' : isWarning ? 'var(--color-warning)' : 'var(--color-healthy)' }}>
+                          {item.daysRemaining}
+                        </span>
+                        <span style={{ color: 'var(--color-text-muted)', fontSize: '10px' }}>days</span>
                       </div>
 
                       <div className="progress-bar-bg">
@@ -173,11 +170,24 @@ export default function Inventory({ inventory, onNavigateToForecast }) {
                       </div>
                     </td>
 
-                    {/* Status Badge */}
+                    {/* Stock-Out Risk */}
                     <td>
                       <span className={`badge badge-${item.status.toLowerCase()}`}>
                         {item.status}
                       </span>
+                      <div style={{ fontSize: '10px', color: 'var(--color-text-muted)', marginTop: '4px' }}>
+                        {isCritical ? '< 3 days' : isWarning ? '3-7 days' : '> 7 days'}
+                      </div>
+                    </td>
+
+                    {/* Predicted Demand */}
+                    <td>
+                      <div style={{ fontSize: '13px', fontWeight: '600', color: 'var(--color-text-main)' }}>
+                        {predictedDemand} units/week
+                      </div>
+                      <div style={{ fontSize: '10px', color: 'var(--color-text-muted)' }}>
+                        Based on current rate
+                      </div>
                     </td>
 
                     {/* Actions */}

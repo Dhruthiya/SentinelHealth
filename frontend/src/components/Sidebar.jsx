@@ -15,31 +15,34 @@ import {
 
 export default function Sidebar({ activeTab, setActiveTab, outbreakActive, alertCount, transferCount }) {
   const navItems = [
-    { id: 'overview', label: 'Overview', icon: LayoutDashboard },
-    { id: 'map', label: 'PHC Map', icon: MapPin },
-    { id: 'inventory', label: 'Inventory', icon: Package },
-    { id: 'forecasts', label: 'Demand Forecasts', icon: TrendingUp },
+    { id: 'overview', label: 'Command Center', icon: LayoutDashboard, section: 'COMMAND' },
+    { id: 'map', label: 'PHC Network', icon: MapPin, section: 'MONITOR' },
+    { id: 'inventory', label: 'Medicine & Beds', icon: Package, section: 'MONITOR' },
+    { id: 'forecasts', label: 'Demand Forecast', icon: TrendingUp, section: 'PREDICT' },
     { 
       id: 'alerts', 
-      label: 'Early Warnings', 
+      label: 'Risk Detection', 
       icon: AlertTriangle, 
       badge: alertCount > 0 ? alertCount : null,
-      badgeType: 'critical'
+      badgeType: 'critical',
+      section: 'PREDICT'
     },
     { 
       id: 'transfers', 
-      label: 'Redistribution', 
+      label: 'Resource Redistribution', 
       icon: Truck, 
       badge: transferCount > 0 ? transferCount : null,
-      badgeType: 'warning'
+      badgeType: 'warning',
+      section: 'RESPOND'
     },
-    { id: 'fl', label: 'Federated Learning', icon: Network },
     { 
       id: 'outbreak', 
-      label: 'Outbreak Simulator', 
+      label: 'Emergency Simulator', 
       icon: Zap, 
-      highlight: outbreakActive 
-    }
+      highlight: outbreakActive,
+      section: 'RESPOND'
+    },
+    { id: 'fl', label: 'Federated Learning', icon: Network, section: 'COLLABORATE' }
   ];
 
   return (
@@ -106,54 +109,62 @@ export default function Sidebar({ activeTab, setActiveTab, outbreakActive, alert
 
       {/* Main Navigation List */}
       <nav style={{ flex: 1, padding: '16px 12px', display: 'flex', flexDirection: 'column', gap: '4px', overflowY: 'auto' }}>
-        <div style={{ fontSize: '10px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#475569', padding: '0 8px 6px 8px' }}>
-          Decision Modules
-        </div>
-
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = activeTab === item.id;
-          const isOutbreakItem = item.id === 'outbreak';
-
+        {['COMMAND', 'MONITOR', 'PREDICT', 'RESPOND', 'COLLABORATE'].map(section => {
+          const sectionItems = navItems.filter(item => item.section === section);
+          if (sectionItems.length === 0) return null;
+          
           return (
-            <button
-              key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              style={{
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '10px 12px',
-                borderRadius: '6px',
-                border: 'none',
-                backgroundColor: isActive 
-                  ? 'var(--color-primary)' 
-                  : (isOutbreakItem && outbreakActive ? 'rgba(232, 163, 61, 0.15)' : 'transparent'),
-                color: isActive ? '#FFFFFF' : (isOutbreakItem && outbreakActive ? '#F59E0B' : '#94A3B8'),
-                fontWeight: isActive ? '600' : '500',
-                fontSize: '13px',
-                cursor: 'pointer',
-                textAlign: 'left',
-                transition: 'all 0.15s ease'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <Icon size={18} style={{ color: isActive ? '#FFFFFF' : (isOutbreakItem && outbreakActive ? '#F59E0B' : '#64748B') }} />
-                <span>{item.label}</span>
+            <div key={section} style={{ marginBottom: '12px' }}>
+              <div style={{ fontSize: '10px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#475569', padding: '0 8px 6px 8px' }}>
+                {section}
               </div>
+              {sectionItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = activeTab === item.id;
+                const isOutbreakItem = item.id === 'outbreak';
 
-              {item.badge && (
-                <span className={`badge badge-${item.badgeType}`} style={{ fontSize: '10px', padding: '1px 6px' }}>
-                  {item.badge}
-                </span>
-              )}
-              {isOutbreakItem && outbreakActive && (
-                <span className="badge badge-warning" style={{ fontSize: '9px', padding: '1px 5px' }}>
-                  ACTIVE
-                </span>
-              )}
-            </button>
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveTab(item.id)}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '10px 12px',
+                      borderRadius: '6px',
+                      border: 'none',
+                      backgroundColor: isActive 
+                        ? 'var(--color-primary)' 
+                        : (isOutbreakItem && outbreakActive ? 'rgba(232, 163, 61, 0.15)' : 'transparent'),
+                      color: isActive ? '#FFFFFF' : (isOutbreakItem && outbreakActive ? '#F59E0B' : '#94A3B8'),
+                      fontWeight: isActive ? '600' : '500',
+                      fontSize: '13px',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      transition: 'all 0.15s ease'
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <Icon size={18} style={{ color: isActive ? '#FFFFFF' : (isOutbreakItem && outbreakActive ? '#F59E0B' : '#64748B') }} />
+                      <span>{item.label}</span>
+                    </div>
+
+                    {item.badge && (
+                      <span className={`badge badge-${item.badgeType}`} style={{ fontSize: '10px', padding: '1px 6px' }}>
+                        {item.badge}
+                      </span>
+                    )}
+                    {isOutbreakItem && outbreakActive && (
+                      <span className="badge badge-warning" style={{ fontSize: '9px', padding: '1px 5px' }}>
+                        ACTIVE
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           );
         })}
       </nav>
