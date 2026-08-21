@@ -64,13 +64,13 @@ This document outlines all technical tasks required beyond the frontend UI to co
 ---
 
 ## 🚨 Module 5: Stock-Out Prediction & Early-Warning Engine
-- [ ] Implement days-to-stockout calculator:
+- [x] Implement days-to-stockout calculator:
   $$\text{Days} = \frac{\text{Current Stock} + \text{Replenishment} - \text{Safety Buffer}}{\text{Predicted Daily Demand}}$$
-- [ ] Implement alert trigger classification logic:
-  - [ ] `SAFETY_THRESHOLD_BREACH` (Stock < safety threshold)
-  - [ ] `FORECAST_STOCKOUT` (Stock-out predicted in $\le 7$ days)
-  - [ ] `DEMAND_ANOMALY` (Consumption deviates $>2.5\sigma$ from baseline)
-- [ ] Implement alert severity ranking system (`CRITICAL`, `WARNING`, `HEALTHY`)
+- [x] Implement alert trigger classification logic:
+  - [x] `SAFETY_THRESHOLD_BREACH` (Stock < safety threshold)
+  - [x] `FORECAST_STOCKOUT` (Stock-out predicted in $\le 7$ days)
+  - [x] `DEMAND_ANOMALY` (Consumption deviates $>2.5\sigma$ from baseline)
+- [x] Implement alert severity ranking system (`CRITICAL`, `WARNING`, `HEALTHY`)
 
 ---
 
@@ -134,7 +134,7 @@ This document outlines all technical tasks required beyond the frontend UI to co
 | **Module 2: Database** | SQLAlchemy ORM Models & Seeder | ✅ **Completed** |
 | **Module 3: Backend API** | FastAPI REST & WebSockets | ✅ **Completed** |
 | **Module 4: Forecasting ML** | Time-series Predictor & Confidence Bands | ✅ **Completed** |
-| **Module 5: Early Warning** | Stock-out Calculator & Severity Engine | 🔲 Pending |
+| **Module 5: Early Warning** | Stock-out Calculator & Severity Engine | ✅ **Completed** |
 | **Module 6: Optimization** | SciPy `linprog` Redistribution Solver | 🔲 Pending |
 | **Module 7: Federated Learning** | Flower FedAvg Server & BRICS Nodes | 🔲 Pending |
 | **Module 8: Outbreak Simulator** | Demand Spike Injection Controller | 🔲 Pending |
