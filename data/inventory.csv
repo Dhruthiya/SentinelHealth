@@ -1,0 +1,9 @@
+id,phc_id,phc_name,medicine_name,category,current_stock,daily_consumption,safety_threshold,days_remaining,status,batch_no,expiry_date
+INV-101,PHC-017,PHC 017 (Rampur),Paracetamol 500mg,Analgesics & Antipyretics,120,42,300,2.8,CRITICAL,PCM-2026-08A,2027-11
+INV-102,PHC-017,PHC 017 (Rampur),ORS Packets,Rehydration,180,75,400,2.4,CRITICAL,ORS-9912B,2028-04
+INV-103,PHC-042,PHC 042 (Sitapur),Paracetamol 500mg,Analgesics & Antipyretics,1450,35,300,41.4,HEALTHY,PCM-2026-04C,2027-09
+INV-104,PHC-009,PHC 009 (Barabanki),Amoxicillin 250mg,Antibiotics,290,55,250,5.2,WARNING,AMX-4410X,2026-12
+INV-105,PHC-055,PHC 055 (Unnao),Artemether Injection,Antimalarial,45,18,100,2.5,CRITICAL,ART-8821Z,2027-05
+INV-106,PHC-055,PHC 055 (Unnao),IV Saline 500ml,Fluid Therapy,90,32,150,2.8,CRITICAL,SAL-1102A,2028-01
+INV-107,PHC-031,PHC 031 (Rae Bareli),Oral Cholera Vaccine,Vaccines,600,15,100,40.0,HEALTHY,OCV-5541K,2026-10
+INV-108,PHC-062,PHC 062 (Hardoi),ORS Packets,Rehydration,820,25,200,32.8,HEALTHY,ORS-7711A,2027-08

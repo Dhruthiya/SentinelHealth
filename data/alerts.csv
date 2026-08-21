@@ -1,0 +1,6 @@
+id,phc_id,phc_name,medicine_name,severity,type,days_to_stockout,predicted_date,message,created_at,acknowledged
+ALT-801,PHC-017,PHC 017 (Rampur),ORS Packets,CRITICAL,FORECAST_STOCKOUT,2,2026-08-23,Predicted stock-out in 2.4 days due to 3.2x consumption spike (Dengue Outbreak cluster).,12 mins ago,False
+ALT-802,PHC-055,PHC 055 (Unnao),Artemether Injection,CRITICAL,SAFETY_THRESHOLD_BREACH,2,2026-08-23,Current stock (45 units) fallen below safety threshold (100 units). Severe Malaria cases detected.,25 mins ago,False
+ALT-803,PHC-017,PHC 017 (Rampur),Paracetamol 500mg,CRITICAL,FORECAST_STOCKOUT,3,2026-08-24,Predicted stock-out in 2.8 days. Urgent cross-district transfer recommended.,40 mins ago,False
+ALT-804,PHC-009,PHC 009 (Barabanki),Amoxicillin 250mg,WARNING,DEMAND_ANOMALY,5,2026-08-26,Abnormal consumption rate (+45% week-over-week). Respiratory infection surge.,1 hour ago,True
+ALT-805,PHC-055,PHC 055 (Unnao),IV Saline 500ml,WARNING,FORECAST_STOCKOUT,3,2026-08-24,Stock projected to breach minimum safety buffer within 72 hours.,2 hours ago,False

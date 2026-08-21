@@ -5,15 +5,15 @@ This document outlines all technical tasks required beyond the frontend UI to co
 ---
 
 ## 📊 Module 1: Data Layer & Synthetic CSV Generation
-- [ ] Create synthetic data generator (`data_generator/generator.py`) to simulate PHC consumption with seasonality and outbreak spikes
-- [ ] Generate standard CSV datasets in `data/`:
-  - [ ] `data/phcs.csv` — Facility metadata, locations, bed occupancy, staff counts
-  - [ ] `data/inventory.csv` — Medicine stock levels, safety thresholds, consumption rates, batch details
-  - [ ] `data/demand_timeseries.csv` — 30-day historical and forecast consumption curves with confidence bands
-  - [ ] `data/alerts.csv` — Active early warnings ranked by severity
-  - [ ] `data/transfers.csv` — SciPy redistribution recommendations
-  - [ ] `data/fl_nodes.csv` — BRICS node statuses and FL round metrics
-- [ ] Create seed script (`data_generator/seed.py`) to populate local database storage from CSV files
+- [x] Create synthetic data generator (`data_generator/generator.py`) to simulate PHC consumption with seasonality and outbreak spikes
+- [x] Generate standard CSV datasets in `data/`:
+  - [x] `data/phcs.csv` — Facility metadata, locations, bed occupancy, staff counts
+  - [x] `data/inventory.csv` — Medicine stock levels, safety thresholds, consumption rates, batch details
+  - [x] `data/demand_timeseries.csv` — 30-day historical and forecast consumption curves with confidence bands
+  - [x] `data/alerts.csv` — Active early warnings ranked by severity
+  - [x] `data/transfers.csv` — SciPy redistribution recommendations
+  - [x] `data/fl_nodes.csv` — BRICS node statuses and FL round metrics
+- [x] Create seed script (`data_generator/seed.py`) to populate local database storage from CSV files
 
 ---
 
@@ -130,7 +130,7 @@ This document outlines all technical tasks required beyond the frontend UI to co
 | Module | Purpose | Status |
 | :--- | :--- | :---: |
 | **Module 0: Frontend UI** | Dashboard, Maps, Charts, FL UI, Outbreak Modal | ✅ **Completed** |
-| **Module 1: Data Layer** | CSV Datasets & Generator | 🔲 Pending |
+| **Module 1: Data Layer** | CSV Datasets & Generator | ✅ **Completed** |
 | **Module 2: Database** | SQLAlchemy ORM Models & Seeder | 🔲 Pending |
 | **Module 3: Backend API** | FastAPI REST & WebSockets | 🔲 Pending |
 | **Module 4: Forecasting ML** | Time-series Predictor & Confidence Bands | 🔲 Pending |

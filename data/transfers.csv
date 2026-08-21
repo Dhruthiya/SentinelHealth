@@ -1,0 +1,4 @@
+id,medicine_name,source_phc_id,source_phc_name,source_surplus,dest_phc_id,dest_phc_name,dest_shortage_days,quantity,priority,urgency_score,distance_km,est_time_mins,impact_message,scipy_score,status
+TRF-301,Paracetamol 500mg,PHC-042,PHC 042 (Sitapur),850,PHC-017,PHC 017 (Rampur),2.8,400,CRITICAL,96,24.5,38,Extends PHC 017 stock coverage by +9.5 days,Linear Program Optimal (0.002s),PENDING
+TRF-302,ORS Packets,PHC-062,PHC 062 (Hardoi),520,PHC-017,PHC 017 (Rampur),2.4,350,CRITICAL,94,31.2,45,Prevents total stock-out during outbreak peak,Linear Program Optimal (0.003s),PENDING
+TRF-303,Artemether Injection,PHC-031,PHC 031 (Rae Bareli),220,PHC-055,PHC 055 (Unnao),2.5,120,HIGH,88,42.0,55,Restores Artemether stock to +6.6 days safety level,Linear Program Optimal (0.001s),PENDING

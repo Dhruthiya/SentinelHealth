@@ -1,0 +1,4 @@
+id,country,flag,node_name,phc_count,records_trained,local_loss,privacy_status,status,round_status
+NODE-IND,India,🇮🇳,AIIMS Delhi / UP State Health Node,142,"1,240,500",0.0412,100% Local Data Preserved,ONLINE,Local Model Ready
+NODE-BRA,Brazil,🇧🇷,Fiocruz Rio / SUS Network Node,98,"890,200",0.0485,100% Local Data Preserved,ONLINE,Local Model Ready
+NODE-ZAF,South Africa,🇿🇦,SAMRC Cape Town / National Node,76,"610,000",0.0512,100% Local Data Preserved,ONLINE,Local Model Ready

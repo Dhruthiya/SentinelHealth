@@ -1,0 +1,7 @@
+id,name,district,state,country,lat,lng,population,beds_total,beds_occupied,staff_present,staff_scheduled,status,last_updated
+PHC-017,Primary Health Centre 017 (Rampur),District B (East),Uttar Pradesh Node,India,26.8467,80.9462,18500,25,22,8,10,CRITICAL,10 mins ago
+PHC-042,Primary Health Centre 042 (Sitapur),District B (East),Uttar Pradesh Node,India,27.5667,80.6833,24000,40,18,14,15,HEALTHY,14 mins ago
+PHC-009,Primary Health Centre 009 (Barabanki),District A (North),Uttar Pradesh Node,India,26.92,81.18,31000,50,46,18,20,WARNING,15 mins ago
+PHC-031,Primary Health Centre 031 (Rae Bareli),District C (South),Uttar Pradesh Node,India,26.23,81.24,15000,20,11,7,8,HEALTHY,14 mins ago
+PHC-055,Primary Health Centre 055 (Unnao),District A (North),Uttar Pradesh Node,India,26.54,80.49,22500,30,27,11,12,CRITICAL,2 mins ago
+PHC-062,Primary Health Centre 062 (Hardoi),District B (East),Uttar Pradesh Node,India,27.4,80.13,19800,35,19,10,10,HEALTHY,13 mins ago

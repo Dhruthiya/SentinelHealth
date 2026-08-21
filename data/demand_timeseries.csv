@@ -1,0 +1,25 @@
+date,phc_id,medicine_name,actual_demand,predicted_demand,ci_upper,ci_lower,safety_stock
+Aug 08,PHC-017,ORS Packets,32.7,,,,25
+Aug 09,PHC-017,ORS Packets,42.3,,,,25
+Aug 10,PHC-017,ORS Packets,45.5,,,,25
+Aug 11,PHC-017,ORS Packets,48.5,,,,25
+Aug 12,PHC-017,ORS Packets,54.0,,,,25
+Aug 13,PHC-017,ORS Packets,57.7,,,,25
+Aug 14,PHC-017,ORS Packets,61.4,,,,25
+Aug 15,PHC-017,ORS Packets,68.0,,,,25
+Aug 16,PHC-017,ORS Packets,70.5,,,,25
+Aug 17,PHC-017,ORS Packets,73.4,,,,25
+Aug 18,PHC-017,ORS Packets,82.6,,,,25
+Aug 19,PHC-017,ORS Packets,83.2,,,,25
+Aug 20,PHC-017,ORS Packets,87.6,,,,25
+Aug 20,PHC-017,ORS Packets,95.0,95.0,95.0,95.0,25
+Aug 22 (Today),PHC-017,ORS Packets,,102,114.2,89.8,25
+Aug 23,PHC-017,ORS Packets,,108,121.0,95.0,25
+Aug 24,PHC-017,ORS Packets,,115,128.8,101.2,25
+Aug 25,PHC-017,ORS Packets,,122,136.6,107.4,25
+Aug 26,PHC-017,ORS Packets,,120,134.4,105.6,25
+Aug 27,PHC-017,ORS Packets,,112,125.4,98.6,25
+Aug 28,PHC-017,ORS Packets,,105,117.6,92.4,25
+Aug 29,PHC-017,ORS Packets,,98,109.8,86.2,25
+Aug 30,PHC-017,ORS Packets,,90,100.8,79.2,25
+Aug 31,PHC-017,ORS Packets,,82,91.8,72.2,25
