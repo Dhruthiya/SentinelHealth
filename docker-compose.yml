@@ -1,0 +1,97 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: sentinelhealth-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-sentinelhealth}
+      POSTGRES_USER: ${POSTGRES_USER:-sentinelhealth}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sentinelhealth_dev}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-sentinelhealth} -d ${POSTGRES_DB:-sentinelhealth}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: sentinelhealth-api
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg2://sentinelhealth:sentinelhealth_dev@db:5432/sentinelhealth}
+    ports:
+      - "${API_PORT:-8000}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=5)"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: sentinelhealth-frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-5173}:5173"
+    depends_on:
+      api:
+        condition: service_healthy
+
+  fl-server:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: sentinelhealth-fl-server
+    restart: unless-stopped
+    command: >
+      python -c "from fl_simulation.server import FederatedServer; import time; server = FederatedServer(); server.run_fl_round(); time.sleep(86400)"
+    depends_on:
+      api:
+        condition: service_healthy
+
+  fl-node-india:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: sentinelhealth-fl-node-india
+    restart: unless-stopped
+    command: >
+      python -c "from fl_simulation.india_client import create_india_client; import time; client = create_india_client(); print(f'{client.country} node ready with {client.sample_count} local records'); time.sleep(86400)"
+    depends_on:
+      - fl-server
+
+  fl-node-brazil:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: sentinelhealth-fl-node-brazil
+    restart: unless-stopped
+    command: >
+      python -c "from fl_simulation.brazil_client import create_brazil_client; import time; client = create_brazil_client(); print(f'{client.country} node ready with {client.sample_count} local records'); time.sleep(86400)"
+    depends_on:
+      - fl-server
+
+  fl-node-southafrica:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: sentinelhealth-fl-node-southafrica
+    restart: unless-stopped
+    command: >
+      python -c "from fl_simulation.south_africa_client import create_south_africa_client; import time; client = create_south_africa_client(); print(f'{client.country} node ready with {client.sample_count} local records'); time.sleep(86400)"
+    depends_on:
+      - fl-server
+
+volumes:
+  postgres_data:

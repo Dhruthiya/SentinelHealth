@@ -104,24 +104,24 @@ This document outlines all technical tasks required beyond the frontend UI to co
 ---
 
 ## 🧪 Module 9: Testing & Evaluation Suite
-- [ ] Write API route unit tests (`backend/tests/test_api.py`)
-- [ ] Write forecasting model evaluation tests (`test_forecasting.py`)
-- [ ] Write stock-out and early-warning logic tests (`test_alerts.py`)
-- [ ] Write SciPy optimization constraint tests (`test_optimization.py`)
-- [ ] Write Flower federated aggregation tests (`test_fl.py`)
-- [ ] Write end-to-end outbreak simulation lifecycle tests (`test_simulation.py`)
+- [x] Write API route unit tests (`backend/tests/test_api.py`)
+- [x] Write forecasting model evaluation tests (`test_forecasting.py`)
+- [x] Write stock-out and early-warning logic tests (`test_alerts.py`)
+- [x] Write SciPy optimization constraint tests (`test_optimization.py`)
+- [x] Write Flower federated aggregation tests (`test_fl.py`)
+- [x] Write end-to-end outbreak simulation lifecycle tests (`test_simulation.py`)
 
 ---
 
 ## 🐳 Module 10: Infrastructure, Docker & CI/CD
-- [ ] Create `.env.example` configuration template
-- [ ] Create `docker-compose.yml` orchestrating:
-  - [ ] `api` container (FastAPI)
-  - [ ] `db` container (PostgreSQL)
-  - [ ] `frontend` container (Vite React app)
-  - [ ] `fl-server` container (Flower FedAvg)
-  - [ ] `fl-node-india`, `fl-node-brazil`, `fl-node-southafrica` containers
-- [ ] Create GitHub Actions CI workflow (`.github/workflows/ci.yml`) for automated pytest and linting
+- [x] Create `.env.example` configuration template
+- [x] Create `docker-compose.yml` orchestrating:
+  - [x] `api` container (FastAPI)
+  - [x] `db` container (PostgreSQL)
+  - [x] `frontend` container (Vite React app)
+  - [x] `fl-server` container (Flower FedAvg)
+  - [x] `fl-node-india`, `fl-node-brazil`, `fl-node-southafrica` containers
+- [x] Create GitHub Actions CI workflow (`.github/workflows/ci.yml`) for automated pytest and linting
 
 ---
 
@@ -138,5 +138,5 @@ This document outlines all technical tasks required beyond the frontend UI to co
 | **Module 6: Optimization** | SciPy `linprog` Redistribution Solver | ✅ **Completed** |
 | **Module 7: Federated Learning** | Flower FedAvg Server & BRICS Nodes | ✅ **Completed** |
 | **Module 8: Outbreak Simulator** | Demand Spike Injection Controller | ✅ **Completed** |
-| **Module 9: Testing Suite** | Pytest Unit & Integration Tests | 🔲 Pending |
-| **Module 10: Infrastructure** | Docker Compose & CI/CD Pipeline | 🔲 Pending |
+| **Module 9: Testing Suite** | Pytest Unit & Integration Tests | ✅ **Completed** |
+| **Module 10: Infrastructure** | Docker Compose & CI/CD Pipeline | ✅ **Completed** |
