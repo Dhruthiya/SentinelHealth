@@ -18,6 +18,7 @@ from backend.database.seed_db import main as seed_database
 from backend.ml.forecasting import DemandForecaster
 from backend.ml.alerts_engine import EarlyWarningEngine, calculate_days_to_stockout
 from backend.ml.redistribution import RedistributionOptimizer
+from backend.ml.outbreak_simulator import OutbreakSimulator
 from fl_simulation.server import FederatedServer
 from backend.schemas import (
     PHCBase,
@@ -235,42 +236,22 @@ def trigger_fl_round(db: Session = Depends(get_db)):
 
 
 @app.post("/api/simulation/outbreak")
-def trigger_outbreak_simulation(db: Session = Depends(get_db)):
-    """Inject simulated outbreak demand spike in District B."""
-    phc17 = db.query(PHCModel).filter(PHCModel.id == "PHC-017").first()
-    phc55 = db.query(PHCModel).filter(PHCModel.id == "PHC-055").first()
-    if phc17: phc17.status = "CRITICAL"
-    if phc55: phc55.status = "CRITICAL"
-    
-    # Update inventory consumption rates
-    inv101 = db.query(StockRecordModel).filter(StockRecordModel.id == "INV-101").first()
-    inv102 = db.query(StockRecordModel).filter(StockRecordModel.id == "INV-102").first()
-    if inv101:
-        inv101.daily_consumption = 105.0
-        inv101.days_remaining = 1.1
-        inv101.status = "CRITICAL"
-    if inv102:
-        inv102.daily_consumption = 187.5
-        inv102.days_remaining = 0.9
-        inv102.status = "CRITICAL"
-        
-    db.commit()
-    return {
-        "status": "active",
-        "scenario": "Dengue Surge (District B)",
-        "affected_phcs": ["PHC-017", "PHC-055"],
-        "demand_multiplier": 3.2
-    }
+def trigger_outbreak_simulation(
+    scenario: str = Query("DENGUE_DISTRICT_B", description="Scenario type (DENGUE_DISTRICT_B, CHOLERA_DISTRICT_A, LOGISTICS_DISRUPTION)"),
+    db: Session = Depends(get_db)
+):
+    """Inject simulated outbreak demand spike, trigger alerts, and run SciPy optimization."""
+    simulator = OutbreakSimulator()
+    res = simulator.inject_outbreak_scenario(db, scenario_type=scenario)
+    return res
 
 
 @app.post("/api/simulation/reset")
 def reset_simulation(db: Session = Depends(get_db)):
     """Reset system to baseline operational state."""
-    seed_database()
-    return {
-        "status": "normal",
-        "message": "System baseline restored."
-    }
+    simulator = OutbreakSimulator()
+    res = simulator.reset_baseline_scenario(db)
+    return res
 
 # -----------------------------------------------------------------------------
 # WebSocket Telemetry Channel
