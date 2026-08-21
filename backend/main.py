@@ -17,6 +17,7 @@ from backend.database.models import (
 from backend.database.seed_db import main as seed_database
 from backend.ml.forecasting import DemandForecaster
 from backend.ml.alerts_engine import EarlyWarningEngine, calculate_days_to_stockout
+from backend.ml.redistribution import RedistributionOptimizer
 from backend.schemas import (
     PHCBase,
     StockRecordBase,

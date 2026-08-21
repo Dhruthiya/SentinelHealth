@@ -75,11 +75,11 @@ This document outlines all technical tasks required beyond the frontend UI to co
 ---
 
 ## 🚚 Module 6: Resource Redistribution Optimization Engine (`SciPy`)
-- [ ] Implement linear programming optimization engine (`backend/ml/redistribution.py`) using `scipy.optimize.linprog`:
+- [x] Implement linear programming optimization engine (`backend/ml/redistribution.py`) using `scipy.optimize.linprog`:
   $$\min \sum \left( C_{\text{transport}} \cdot d_{ij} + P_{\text{urgency}} \cdot \text{UnmetShortage}_j \right)$$
-- [ ] Enforce safety constraints: *Source stock after transfer $\ge$ Safety Stock Floor*
-- [ ] Implement fallback heuristic solver for infeasible optimization states
-- [ ] Build human-in-the-loop approval workflow and audit log tracker
+- [x] Enforce safety constraints: *Source stock after transfer $\ge$ Safety Stock Floor*
+- [x] Implement fallback heuristic solver for infeasible optimization states
+- [x] Build human-in-the-loop approval workflow and audit log tracker
 
 ---
 
@@ -135,7 +135,7 @@ This document outlines all technical tasks required beyond the frontend UI to co
 | **Module 3: Backend API** | FastAPI REST & WebSockets | ✅ **Completed** |
 | **Module 4: Forecasting ML** | Time-series Predictor & Confidence Bands | ✅ **Completed** |
 | **Module 5: Early Warning** | Stock-out Calculator & Severity Engine | ✅ **Completed** |
-| **Module 6: Optimization** | SciPy `linprog` Redistribution Solver | 🔲 Pending |
+| **Module 6: Optimization** | SciPy `linprog` Redistribution Solver | ✅ **Completed** |
 | **Module 7: Federated Learning** | Flower FedAvg Server & BRICS Nodes | 🔲 Pending |
 | **Module 8: Outbreak Simulator** | Demand Spike Injection Controller | 🔲 Pending |
 | **Module 9: Testing Suite** | Pytest Unit & Integration Tests | 🔲 Pending |
