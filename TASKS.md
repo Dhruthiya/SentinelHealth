@@ -18,14 +18,14 @@ This document outlines all technical tasks required beyond the frontend UI to co
 ---
 
 ## 🗄️ Module 2: Database Schema & Data Models
-- [ ] Configure SQLAlchemy ORM models and database connection in `backend/database/`
-- [ ] Implement `PHC` table (facility metadata, lat/lng coordinates, beds, staff, status)
-- [ ] Implement `Medicine` table (essential drug catalog, category, safety stock thresholds)
-- [ ] Implement `StockRecord` table (phc_id, medicine_id, current_stock, daily_consumption, batch_no, expiry_date)
-- [ ] Implement `ForecastResult` table (phc_id, medicine_id, date, predicted_demand, ci_upper, ci_lower, safety_stock)
-- [ ] Implement `Alert` table (phc_id, medicine_id, severity, type, days_to_stockout, message, acknowledged status)
-- [ ] Implement `RedistributionRecommendation` table (medicine_id, source_phc, dest_phc, quantity, priority, urgency_score, distance, status)
-- [ ] Implement `FLRound` table (round_number, node_id, local_metric, global_metric, timestamp)
+- [x] Configure SQLAlchemy ORM models and database connection in `backend/database/`
+- [x] Implement `PHC` table (facility metadata, lat/lng coordinates, beds, staff, status)
+- [x] Implement `Medicine` table (essential drug catalog, category, safety stock thresholds)
+- [x] Implement `StockRecord` table (phc_id, medicine_id, current_stock, daily_consumption, batch_no, expiry_date)
+- [x] Implement `ForecastResult` table (phc_id, medicine_id, date, predicted_demand, ci_upper, ci_lower, safety_stock)
+- [x] Implement `Alert` table (phc_id, medicine_id, severity, type, days_to_stockout, message, acknowledged status)
+- [x] Implement `RedistributionRecommendation` table (medicine_id, source_phc, dest_phc, quantity, priority, urgency_score, distance, status)
+- [x] Implement `FLRound` table (round_number, node_id, local_metric, global_metric, timestamp)
 
 ---
 
@@ -131,7 +131,7 @@ This document outlines all technical tasks required beyond the frontend UI to co
 | :--- | :--- | :---: |
 | **Module 0: Frontend UI** | Dashboard, Maps, Charts, FL UI, Outbreak Modal | ✅ **Completed** |
 | **Module 1: Data Layer** | CSV Datasets & Generator | ✅ **Completed** |
-| **Module 2: Database** | SQLAlchemy ORM Models & Seeder | 🔲 Pending |
+| **Module 2: Database** | SQLAlchemy ORM Models & Seeder | ✅ **Completed** |
 | **Module 3: Backend API** | FastAPI REST & WebSockets | 🔲 Pending |
 | **Module 4: Forecasting ML** | Time-series Predictor & Confidence Bands | 🔲 Pending |
 | **Module 5: Early Warning** | Stock-out Calculator & Severity Engine | 🔲 Pending |
