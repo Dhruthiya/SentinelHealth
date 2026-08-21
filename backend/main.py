@@ -15,6 +15,7 @@ from backend.database.models import (
     FLRoundModel
 )
 from backend.database.seed_db import main as seed_database
+from backend.ml.forecasting import DemandForecaster
 from backend.schemas import (
     PHCBase,
     StockRecordBase,
@@ -126,18 +127,35 @@ def get_inventory(
 
 
 @app.get("/api/forecast/{phc_id}/{medicine_name}", response_model=List[ForecastPoint])
-def get_forecast(phc_id: str, medicine_name: str, db: Session = Depends(get_db)):
-    """Retrieve historical & 7/14/30-day predictive demand time series for a PHC and medicine."""
+def get_forecast(phc_id: str, medicine_name: str, horizon: int = Query(14, description="Forecast horizon in days"), db: Session = Depends(get_db)):
+    """Retrieve historical & predictive demand time series calculated dynamically using DemandForecaster ML engine."""
     results = db.query(ForecastResultModel).filter(
         ForecastResultModel.phc_id == phc_id,
         ForecastResultModel.medicine_name == medicine_name
     ).all()
     
-    # Fallback to general forecast time series if specific combo not found
+    # Fallback if specific combo not found in initial dataset
     if not results:
         results = db.query(ForecastResultModel).filter(
             ForecastResultModel.phc_id == "PHC-017"
         ).all()
+
+    # Extract historical actual consumption series
+    actual_history = [r.actual_demand for r in results if r.actual_demand is not None]
+    
+    if len(actual_history) > 0:
+        forecaster = DemandForecaster()
+        forecast_res = forecaster.fit_predict(actual_history, horizon_days=min(30, horizon))
+        
+        # Attach metric headers if needed
+        # Overwrite forecast predictions with ML model output
+        forecast_idx = 0
+        for r in results:
+            if r.predicted_demand is not None and forecast_idx < len(forecast_res["predictions"]):
+                r.predicted_demand = forecast_res["predictions"][forecast_idx]
+                r.ci_upper = forecast_res["ci_upper"][forecast_idx]
+                r.ci_lower = forecast_res["ci_lower"][forecast_idx]
+                forecast_idx += 1
         
     return results
 

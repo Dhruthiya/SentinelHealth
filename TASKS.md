@@ -56,10 +56,10 @@ This document outlines all technical tasks required beyond the frontend UI to co
 ---
 
 ## 🔮 Module 4: Machine Learning & Demand Forecasting Engine
-- [ ] Implement baseline forecasting module (`backend/ml/forecasting.py`) using Prophet / ARIMA / Holt-Winters
-- [ ] Implement parameterized ML model capable of local training and FL parameter export
-- [ ] Build 7, 14, and 30-day forecasting pipeline with 95% upper and lower confidence bands
-- [ ] Build model evaluation module calculating MAE, RMSE, and forecast stability scores
+- [x] Implement baseline forecasting module (`backend/ml/forecasting.py`) using Prophet / ARIMA / Holt-Winters
+- [x] Implement parameterized ML model capable of local training and FL parameter export
+- [x] Build 7, 14, and 30-day forecasting pipeline with 95% upper and lower confidence bands
+- [x] Build model evaluation module calculating MAE, RMSE, and forecast stability scores
 
 ---
 
@@ -133,7 +133,7 @@ This document outlines all technical tasks required beyond the frontend UI to co
 | **Module 1: Data Layer** | CSV Datasets & Generator | ✅ **Completed** |
 | **Module 2: Database** | SQLAlchemy ORM Models & Seeder | ✅ **Completed** |
 | **Module 3: Backend API** | FastAPI REST & WebSockets | ✅ **Completed** |
-| **Module 4: Forecasting ML** | Time-series Predictor & Confidence Bands | 🔲 Pending |
+| **Module 4: Forecasting ML** | Time-series Predictor & Confidence Bands | ✅ **Completed** |
 | **Module 5: Early Warning** | Stock-out Calculator & Severity Engine | 🔲 Pending |
 | **Module 6: Optimization** | SciPy `linprog` Redistribution Solver | 🔲 Pending |
 | **Module 7: Federated Learning** | Flower FedAvg Server & BRICS Nodes | 🔲 Pending |
