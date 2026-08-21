@@ -38,10 +38,6 @@ The platform enables healthcare administrators to:
 - Demonstrate privacy-aware collaborative ML through Federated Learning
 - Follow clear MONITOR → PREDICT → RESPOND → COLLABORATE workflow
 
-## 🌍 Live Deployments
-
-- **Frontend Dashboard**: [https://frontend-smoky-pi-12.vercel.app](https://frontend-smoky-pi-12.vercel.app) - Interactive dashboard with all features
-- **Backend API**: [https://backend-weld-three-59.vercel.app](https://backend-weld-three-59.vercel.app) - REST API with WebSocket support
 
 *For detailed project information, see [ABOUT.md](ABOUT.md)*
 
