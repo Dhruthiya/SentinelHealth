@@ -27,16 +27,23 @@ Healthcare facilities can face medicine shortages because demand fluctuates, inv
 
 The platform enables healthcare administrators to:
 
-- Monitor Primary Health Centres (PHCs) and national health resilience
+- Monitor Primary Health Centres (PHCs) and national health resilience with calculated resilience scores
 - Track medicine inventory, bed capacity, and personnel availability
-- Monitor patient footfall and demand patterns
-- Forecast future demand with transparent reasoning
-- Predict potential stock-outs with clear timelines
-- Detect abnormal demand spikes
+- Monitor patient footfall and demand patterns with forecasting
+- Forecast future demand with transparent reasoning and confidence intervals
+- Predict potential stock-outs with clear timelines and severity rankings
+- Detect abnormal demand spikes and consumption anomalies
 - Recommend medicine redistribution with before/after impact analysis
 - Simulate outbreak scenarios and projected system response
 - Demonstrate privacy-aware collaborative ML through Federated Learning
 - Follow clear MONITOR → PREDICT → RESPOND → COLLABORATE workflow
+
+## 🌍 Live Deployments
+
+- **Frontend Dashboard**: [https://frontend-smoky-pi-12.vercel.app](https://frontend-smoky-pi-12.vercel.app) - Interactive dashboard with all features
+- **Backend API**: [https://backend-weld-three-59.vercel.app](https://backend-weld-three-59.vercel.app) - REST API with WebSocket support
+
+*For detailed project information, see [ABOUT.md](ABOUT.md)*
 
 ```text
 PHC / HEALTHCARE DATA
@@ -60,15 +67,17 @@ PHC / HEALTHCARE DATA
 
 | Feature                 | Description                                                     |
 | ----------------------- | --------------------------------------------------------------- |
-| 📊 PHC Monitoring       | Monitor healthcare centres, inventory and resource availability |
-| 🔮 Demand Forecasting   | Predict future medicine requirements                            |
-| 🚨 Stock-Out Prediction | Identify medicines at risk of running out                       |
+| 📊 PHC Monitoring       | Monitor healthcare centres, inventory and resource availability with national resilience scoring |
+| 🔮 Demand Forecasting   | Predict future medicine requirements with confidence intervals  |
+| 🚨 Stock-Out Prediction | Identify medicines at risk of running out with severity rankings |
 | 🔔 Early-Warning Alerts | Generate risk-based alerts before shortages become critical     |
-| 🚚 Redistribution       | Recommend optimized transfers between PHCs                      |
+| 🚚 Redistribution       | Recommend optimized transfers between PHCs with impact analysis  |
 | 🦠 Outbreak Simulation  | Simulate sudden demand spikes and observe system response       |
-| 🌐 Federated Learning   | Simulate collaborative ML across BRICS nodes                    |
+| 🌐 Federated Learning   | Simulate collaborative ML across BRICS nodes with privacy preservation |
 | 🗺️ PHC Map             | Visualize healthcare facilities and their resource status       |
 | 👤 Human-in-the-Loop    | Allow administrators to review and approve recommendations      |
+| 🎯 Operational KPIs    | Bed capacity, staff availability, patient footfall tracking     |
+| 📈 AI Decision Timeline | Visual processing steps from detection to human approval       |
 
 ---
 
@@ -253,15 +262,19 @@ The scenario can be reset after demonstration.
 
 The dashboard provides:
 
-* Total PHCs
-* Medicine availability
-* Critical alerts
-* Predicted stock-outs
-* Demand forecasts
-* PHC map
-* Inventory status
-* Redistribution recommendations
-* Federated Learning status
+* **National Health Resilience Score** - System-wide health status (STABLE/AT RISK/CRITICAL)
+* **Operational KPI Hierarchy** - Medicine availability, bed capacity, staff, patient footfall
+* **Critical Risks Section** - Immediate action items prominently displayed
+* **AI Decision Timeline** - Visual processing steps from detection to approval
+* **Total PHCs** - Monitored facilities with status filtering
+* **Medicine availability** - Real-time inventory tracking
+* **Critical alerts** - Severity-based early warnings
+* **Predicted stock-outs** - Days-to-stockout calculations
+* **Demand forecasts** - Time-series predictions with confidence bands
+* **PHC map** - Geographic visualization with status indicators
+* **Inventory status** - Category and status filtering
+* **Redistribution recommendations** - SciPy optimized transfer plans
+* **Federated Learning status** - BRICS node performance and privacy metrics
 
 ---
 
