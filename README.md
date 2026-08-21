@@ -1,10 +1,28 @@
 # 🏥 SENTINELHEALTH — AI-Powered Healthcare Resource & Supply-Chain Resilience
 
+> **BRICS AI Challenge (Track 3: Smart Health & Supply Chain Resilience)**  
+> *A high-trust, predictive decision-support system for Primary Health Centre (PHC) networks.*
+
+---
+
+## 🎨 Unified Design System & Product Identity
+
+The **SentinelHealth** platform and documentation adhere to a strict, high-trust Gov-Tech design system built for maximum legibility and rapid decision-making by public health administrators.
+
+| System Attribute | Specification & Implementation |
+| :--- | :--- |
+| **Primary Base** | Deep Teal / Slate Blue (`#0E7C7B` / `#0B5FA5`) — Authority, stability, medical domain trust |
+| **Background / Surfaces** | Off-white canvas (`#F7F9FB`) with white cards (`#FFFFFF`) and crisp slate borders (`#E2E8F0`) |
+| **Text Hierarchy** | Inter / IBM Plex Sans — Slate near-black (`#1A2332`) for high contrast and readability |
+| **Status / Severity Matrix** | **Critical**: `#D64545` (Red) \| **High/Warning**: `#E8A33D` (Amber) \| **Normal**: `#3EA66B` (Green) |
+| **Design Philosophy** | High-density data SaaS dashboard (Grafana / CDC standard) — functional, calm, zero decorative fluff |
+
 ---
 
 ## 🎯 Executive Summary
 
 Healthcare facilities can face medicine shortages because demand fluctuates, inventory is fragmented, and supply-chain decisions are often reactive.
+
 
 **SentinelHealth** transforms healthcare resource data into predictive and actionable intelligence by combining demand forecasting, stock-out prediction, early-warning alerts, optimization, and federated learning.
 
