@@ -30,28 +30,28 @@ This document outlines all technical tasks required beyond the frontend UI to co
 ---
 
 ## ⚡ Module 3: Backend REST API & WebSocket Telemetry (FastAPI)
-- [ ] Set up FastAPI application structure (`backend/main.py`) with CORS middleware
-- [ ] Implement PHC endpoints:
-  - [ ] `GET /api/health` — System and database health status
-  - [ ] `GET /api/phcs` — List all PHCs with district and status filtering
-  - [ ] `GET /api/phcs/{id}` — Get single PHC details and current inventory
-- [ ] Implement Inventory endpoints:
-  - [ ] `GET /api/inventory` — List inventory with category and status filters
-- [ ] Implement Demand Forecast endpoints:
-  - [ ] `GET /api/forecast/{phc_id}/{medicine_id}` — Get historical & 7/14/30-day forecast curves
-- [ ] Implement Early Warning Alert endpoints:
-  - [ ] `GET /api/alerts` — List ranked active alerts
-  - [ ] `POST /api/alerts/{id}/acknowledge` — Acknowledge an alert
-- [ ] Implement Resource Redistribution endpoints:
-  - [ ] `GET /api/redistribution/recommendations` — Retrieve transfer plans
-  - [ ] `POST /api/redistribution/{id}/approve` — Authorize transfer recommendation
-- [ ] Implement Federated Learning endpoints:
-  - [ ] `GET /api/fl/status` — Get FL training state and local vs global MAE metrics
-  - [ ] `POST /api/fl/round` — Trigger new FL aggregation round
-- [ ] Implement Outbreak Simulation endpoints:
-  - [ ] `POST /api/simulation/outbreak` — Inject simulated outbreak demand surge
-  - [ ] `POST /api/simulation/reset` — Reset simulation environment
-- [ ] Implement WebSocket endpoint (`WS /ws/live`) for real-time dashboard updates
+- [x] Set up FastAPI application structure (`backend/main.py`) with CORS middleware
+- [x] Implement PHC endpoints:
+  - [x] `GET /api/health` — System and database health status
+  - [x] `GET /api/phcs` — List all PHCs with district and status filtering
+  - [x] `GET /api/phcs/{id}` — Get single PHC details and current inventory
+- [x] Implement Inventory endpoints:
+  - [x] `GET /api/inventory` — List inventory with category and status filters
+- [x] Implement Demand Forecast endpoints:
+  - [x] `GET /api/forecast/{phc_id}/{medicine_id}` — Get historical & 7/14/30-day forecast curves
+- [x] Implement Early Warning Alert endpoints:
+  - [x] `GET /api/alerts` — List ranked active alerts
+  - [x] `POST /api/alerts/{id}/acknowledge` — Acknowledge an alert
+- [x] Implement Resource Redistribution endpoints:
+  - [x] `GET /api/redistribution/recommendations` — Retrieve transfer plans
+  - [x] `POST /api/redistribution/{id}/approve` — Authorize transfer recommendation
+- [x] Implement Federated Learning endpoints:
+  - [x] `GET /api/fl/status` — Get FL training state and local vs global MAE metrics
+  - [x] `POST /api/fl/round` — Trigger new FL aggregation round
+- [x] Implement Outbreak Simulation endpoints:
+  - [x] `POST /api/simulation/outbreak` — Inject simulated outbreak demand surge
+  - [x] `POST /api/simulation/reset` — Reset simulation environment
+- [x] Implement WebSocket endpoint (`WS /ws/live`) for real-time dashboard updates
 
 ---
 
@@ -132,7 +132,7 @@ This document outlines all technical tasks required beyond the frontend UI to co
 | **Module 0: Frontend UI** | Dashboard, Maps, Charts, FL UI, Outbreak Modal | ✅ **Completed** |
 | **Module 1: Data Layer** | CSV Datasets & Generator | ✅ **Completed** |
 | **Module 2: Database** | SQLAlchemy ORM Models & Seeder | ✅ **Completed** |
-| **Module 3: Backend API** | FastAPI REST & WebSockets | 🔲 Pending |
+| **Module 3: Backend API** | FastAPI REST & WebSockets | ✅ **Completed** |
 | **Module 4: Forecasting ML** | Time-series Predictor & Confidence Bands | 🔲 Pending |
 | **Module 5: Early Warning** | Stock-out Calculator & Severity Engine | 🔲 Pending |
 | **Module 6: Optimization** | SciPy `linprog` Redistribution Solver | 🔲 Pending |
