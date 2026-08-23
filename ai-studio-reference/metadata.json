@@ -1,0 +1,6 @@
+{
+  "name": "AEROHEALTH // SentinelHealth",
+  "description": "Next-generation biometric synchronization and real-time physiological telemetry platform with Solarin core visualizer and health monitoring dashboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

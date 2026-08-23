@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background-deep: #2C3531;
+    --primary-container: #116466;
+    --secondary: #D9B08C;
+    --tertiary: #FFCB9A;
+    --interface-text: #D1E8E2;
+    --primary: #8cd3d4;
+    --surface: #0d1512;
+    --surface-container-low: #151d1a;
+    --surface-container-high: #232c28;
+    --surface-container-highest: #2e3733;
+    --outline: #899393;
+    --outline-variant: #3f4949;
+    --on-surface-variant: #bec8c8;
+    --border-line: #D1E8E2;
+  }
+
+  body {
+    font-family: 'Hanken Grotesk', sans-serif;
+    background-color: var(--background-deep);
+    color: var(--interface-text);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Sora', sans-serif;
+  }
+
+  .font-mono-tech {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0d1512;
+}
+::-webkit-scrollbar-thumb {
+  background: #116466;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #8cd3d4;
+}
+
+/* Glow & Futuristic Borders */
+.tech-border {
+  border: 1px solid rgba(209, 232, 226, 0.2);
+  box-shadow: 0 0 12px rgba(17, 100, 102, 0.15);
+}
+
+.tech-border-teal {
+  border: 1px solid #116466;
+  box-shadow: 0 0 15px rgba(17, 100, 102, 0.3);
+}
+
+.tech-glow {
+  box-shadow: 0 0 20px rgba(17, 100, 102, 0.35);
+}
+
+.hero-glow {
+  box-shadow: 0 0 100px rgba(17, 100, 102, 0.5), inset 0 0 50px rgba(17, 100, 102, 0.2);
+}
+
+.hero-glow-intense {
+  box-shadow: 0 0 140px rgba(17, 100, 102, 0.7), inset 0 0 70px rgba(140, 211, 212, 0.3);
+}
+
+.text-glow {
+  text-shadow: 0 0 12px rgba(140, 211, 212, 0.6);
+}
+
+.text-glow-gold {
+  text-shadow: 0 0 10px rgba(217, 176, 140, 0.5);
+}
+
+.glass-panel {
+  background: rgba(21, 29, 26, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.glass-nav {
+  background: rgba(13, 21, 18, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.btn-glow {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-glow:hover {
+  box-shadow: 0 0 25px rgba(17, 100, 102, 0.6);
+  background-color: rgba(17, 100, 102, 0.25);
+  border-color: #8cd3d4;
+  color: #8cd3d4;
+}
+
+.ambient-bg {
+  background: radial-gradient(circle at 50% 50%, #2C3531 0%, #0d1512 85%);
+}
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+}
+

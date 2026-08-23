@@ -2,12 +2,8 @@ import React, { useState } from 'react';
 import { 
   Search, 
   Filter, 
-  Package, 
-  AlertTriangle, 
   TrendingUp, 
-  Download, 
-  RefreshCw,
-  Plus
+  Download
 } from 'lucide-react';
 
 export default function Inventory({ inventory, onNavigateToForecast }) {
@@ -27,33 +23,46 @@ export default function Inventory({ inventory, onNavigateToForecast }) {
   });
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       
       {/* Header & Action Bar */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', gap: '16px' }}>
         <div>
-          <h2 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--color-text-main)' }}>
-            Primary Health Centre Inventory Telemetry
-          </h2>
-          <div style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
+          <div style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', color: '#8cd3d4', textTransform: 'uppercase', letterSpacing: '0.2em' }}>
+            FACILITY SUPPLY TELEMETRY // REAL-TIME STOCKS
+          </div>
+          <h1 
+            style={{ 
+              fontSize: 'clamp(22px, 3vw, 32px)', 
+              fontWeight: 800, 
+              color: '#D1E8E2', 
+              fontFamily: 'var(--font-title)',
+              marginTop: '4px',
+              letterSpacing: '0.04em'
+            }} 
+            className="text-glow"
+          >
+            PHC RESOURCE &amp; MEDICINE INVENTORY
+          </h1>
+          <div style={{ fontSize: '13px', color: '#bec8c8', marginTop: '4px' }}>
             Real-time stock levels, daily consumption velocities, and safety buffers across facilities
           </div>
         </div>
 
         <div style={{ display: 'flex', gap: '10px' }}>
-          <button className="btn btn-outline">
-            <Download size={14} /> Export CSV Report
+          <button className="btn btn-outline btn-sm">
+            <Download size={14} color="#8cd3d4" /> Export CSV Report
           </button>
         </div>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="sh-card" style={{ padding: '14px 20px' }}>
+      <div className="sh-card" style={{ padding: '16px 20px' }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', justifyContent: 'space-between' }}>
           
           {/* Search Box */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: '280px' }}>
-            <Search size={16} style={{ color: 'var(--color-text-muted)' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: '280px', flex: '1 1 300px' }}>
+            <Search size={16} color="#8cd3d4" />
             <input 
               type="text"
               className="sh-input"
@@ -65,9 +74,9 @@ export default function Inventory({ inventory, onNavigateToForecast }) {
           </div>
 
           {/* Filters */}
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--color-text-muted)' }}>
-              <Filter size={13} /> Category:
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#bec8c8', fontFamily: 'var(--font-mono)' }}>
+              <Filter size={13} color="#8cd3d4" /> Category:
             </div>
             <select 
               className="sh-select"
@@ -79,7 +88,7 @@ export default function Inventory({ inventory, onNavigateToForecast }) {
               ))}
             </select>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--color-text-muted)', marginLeft: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#bec8c8', fontFamily: 'var(--font-mono)', marginLeft: '8px' }}>
               Status:
             </div>
             <select 
@@ -107,7 +116,7 @@ export default function Inventory({ inventory, onNavigateToForecast }) {
                 <th>Medicine &amp; Category</th>
                 <th>Batch &amp; Expiry</th>
                 <th>Current Stock</th>
-                <th>Daily Consumption</th>
+                <th>Daily Velocity</th>
                 <th>Stock Autonomy</th>
                 <th>Status</th>
                 <th>Action</th>
@@ -122,44 +131,44 @@ export default function Inventory({ inventory, onNavigateToForecast }) {
                   <tr key={item.id}>
                     {/* Facility */}
                     <td>
-                      <div style={{ fontWeight: '600', color: 'var(--color-text-main)' }}>{item.phcName}</div>
-                      <div style={{ fontSize: '11px', color: 'var(--color-text-muted)' }}>ID: {item.phcId}</div>
+                      <div style={{ fontWeight: '700', color: '#D1E8E2', fontFamily: 'var(--font-title)' }}>{item.phcName}</div>
+                      <div style={{ fontSize: '11px', color: '#8cd3d4' }}>ID: {item.phcId}</div>
                     </td>
 
                     {/* Medicine */}
                     <td>
-                      <div style={{ fontWeight: '600', color: 'var(--color-text-main)' }}>{item.medicineName}</div>
-                      <div style={{ fontSize: '11px', color: 'var(--color-text-muted)' }}>{item.category}</div>
+                      <div style={{ fontWeight: '600', color: '#D1E8E2' }}>{item.medicineName}</div>
+                      <div style={{ fontSize: '11px', color: '#bec8c8' }}>{item.category}</div>
                     </td>
 
                     {/* Batch & Expiry */}
                     <td>
-                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12px' }}>{item.batchNo}</div>
-                      <div style={{ fontSize: '11px', color: 'var(--color-text-muted)' }}>Exp: {item.expiryDate}</div>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: '#D9B08C' }}>{item.batchNo}</div>
+                      <div style={{ fontSize: '11px', color: '#899393' }}>Exp: {item.expiryDate}</div>
                     </td>
 
                     {/* Current Stock */}
                     <td>
-                      <div style={{ fontSize: '14px', fontWeight: '700', color: isCritical ? 'var(--color-critical)' : 'var(--color-text-main)' }}>
+                      <div style={{ fontSize: '14px', fontWeight: '700', color: isCritical ? '#FF7B7B' : '#D1E8E2', fontFamily: 'var(--font-title)' }}>
                         {item.currentStock.toLocaleString()} units
                       </div>
-                      <div style={{ fontSize: '11px', color: 'var(--color-text-muted)' }}>
+                      <div style={{ fontSize: '11px', color: '#bec8c8' }}>
                         Buffer: {item.safetyThreshold} units
                       </div>
                     </td>
 
                     {/* Daily Consumption */}
                     <td>
-                      <div style={{ fontSize: '13px', fontWeight: '500' }}>
+                      <div style={{ fontSize: '13px', fontWeight: '600', color: '#D1E8E2' }}>
                         {item.dailyConsumption} units/day
                       </div>
                     </td>
 
                     {/* Stock Autonomy (Days Remaining Gauge) */}
                     <td style={{ minWidth: '160px' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: '600', marginBottom: '4px' }}>
-                        <span>{item.daysRemaining} Days</span>
-                        <span style={{ color: 'var(--color-text-muted)', fontSize: '10px' }}>Remaining</span>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', fontWeight: '600', marginBottom: '4px', fontFamily: 'var(--font-mono)' }}>
+                        <span style={{ color: isCritical ? '#FF7B7B' : isWarning ? '#FFCB9A' : '#6EE7B7' }}>{item.daysRemaining} Days</span>
+                        <span style={{ color: '#899393' }}>Remaining</span>
                       </div>
 
                       <div className="progress-bar-bg">
@@ -167,7 +176,7 @@ export default function Inventory({ inventory, onNavigateToForecast }) {
                           className="progress-bar-fill" 
                           style={{
                             width: `${Math.min(100, (item.daysRemaining / 30) * 100)}%`,
-                            backgroundColor: isCritical ? 'var(--color-critical)' : isWarning ? 'var(--color-warning)' : 'var(--color-healthy)'
+                            backgroundColor: isCritical ? '#EF4444' : isWarning ? '#F59E0B' : '#10B981'
                           }}
                         />
                       </div>
@@ -184,9 +193,12 @@ export default function Inventory({ inventory, onNavigateToForecast }) {
                     <td>
                       <button 
                         className="btn btn-outline btn-sm"
-                        onClick={() => onNavigateToForecast(item)}
+                        onClick={() => {
+                          if (onNavigateToForecast) onNavigateToForecast(item);
+                        }}
+                        style={{ padding: '4px 10px', fontSize: '11px' }}
                       >
-                        <TrendingUp size={12} /> Forecast
+                        <TrendingUp size={12} color="#8cd3d4" /> Forecast
                       </button>
                     </td>
                   </tr>

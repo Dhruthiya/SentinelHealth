@@ -1,12 +1,8 @@
 import React from 'react';
 import { 
   Zap, 
-  AlertTriangle, 
-  CheckCircle2, 
   RotateCcw, 
-  X,
-  TrendingUp,
-  Activity
+  X
 } from 'lucide-react';
 
 export default function OutbreakSimulatorModal({ 
@@ -18,56 +14,67 @@ export default function OutbreakSimulatorModal({
   if (!isOpen) return null;
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(15, 23, 42, 0.6)',
-      backdropFilter: 'blur(3px)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 200
-    }}>
-      <div className="sh-card" style={{
-        width: '520px',
-        maxWidth: '90vw',
-        padding: '24px',
-        boxShadow: 'var(--shadow-lg)'
-      }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{
-              padding: '8px',
-              borderRadius: '6px',
-              backgroundColor: outbreakActive ? 'var(--color-warning-bg)' : 'var(--color-primary-light)',
-              color: outbreakActive ? 'var(--color-warning)' : 'var(--color-primary)'
-            }}>
-              <Zap size={20} />
+    <div 
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.82)',
+        backdropFilter: 'blur(16px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 200,
+        padding: '16px'
+      }}
+    >
+      <div 
+        className="sh-card" 
+        style={{
+          width: '540px',
+          maxWidth: '92vw',
+          padding: '28px',
+          boxShadow: '0 0 50px rgba(17, 100, 102, 0.5)',
+          border: '1px solid #116466',
+          backgroundColor: '#0d1512'
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid rgba(17, 100, 102, 0.4)', paddingBottom: '14px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div 
+              style={{
+                padding: '8px',
+                borderRadius: '4px',
+                backgroundColor: outbreakActive ? 'rgba(245, 158, 11, 0.25)' : 'rgba(17, 100, 102, 0.3)',
+                color: outbreakActive ? '#FFCB9A' : '#8cd3d4',
+                border: `1px solid ${outbreakActive ? 'rgba(245, 158, 11, 0.5)' : 'rgba(140, 211, 212, 0.4)'}`
+              }}
+            >
+              <Zap size={22} />
             </div>
             <div>
-              <h3 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--color-text-main)' }}>
-                Outbreak &amp; Demand Spike Simulator
+              <span style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', color: '#8cd3d4', textTransform: 'uppercase', letterSpacing: '0.2em' }}>
+                SCENARIO CONTROLLER
+              </span>
+              <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#D1E8E2', fontFamily: 'var(--font-title)', marginTop: '2px' }}>
+                OUTBREAK &amp; DEMAND SPIKE SIMULATOR
               </h3>
-              <div style={{ fontSize: '11px', color: 'var(--color-text-muted)' }}>
-                Demonstration control panel for BRICS AI Challenge evaluation
-              </div>
             </div>
           </div>
 
-          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-muted)' }}>
-            <X size={18} />
+          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#bec8c8', padding: '4px' }}>
+            <X size={20} />
           </button>
         </div>
 
-        <div style={{ fontSize: '13px', color: 'var(--color-text-main)', lineHeight: '1.5', marginBottom: '20px' }}>
+        <div style={{ fontSize: '13px', color: '#D1E8E2', lineHeight: '1.6', marginBottom: '24px' }}>
           {outbreakActive ? (
-            <div style={{ padding: '12px', borderRadius: '6px', backgroundColor: 'var(--color-warning-bg)', border: '1px solid var(--color-warning-border)' }}>
-              <strong style={{ color: 'var(--color-warning)' }}>⚠️ Active Outbreak Scenario: Dengue Surge (District B)</strong>
-              <div style={{ marginTop: '6px', fontSize: '12px', color: 'var(--color-text-main)' }}>
-                • Consumption rate for ORS Packets &amp; Paracetamol increased by <strong>3.2x</strong> at PHC 017 and PHC 055.
+            <div style={{ padding: '14px', borderRadius: '4px', backgroundColor: 'rgba(245, 158, 11, 0.15)', border: '1px solid rgba(245, 158, 11, 0.4)', fontFamily: 'var(--font-mono)' }}>
+              <strong style={{ color: '#FFCB9A', fontSize: '13px' }}>⚠️ ACTIVE OUTBREAK SCENARIO: Dengue Surge (District B)</strong>
+              <div style={{ marginTop: '8px', fontSize: '12px', color: '#bec8c8' }}>
+                • Consumption rate for ORS Packets &amp; Paracetamol increased by <strong style={{ color: '#FFCB9A' }}>3.2x</strong> at PHC 017 and PHC 055.
                 <br />
                 • Early-warning engine generated 3 critical stock-out alerts.
                 <br />
@@ -75,37 +82,37 @@ export default function OutbreakSimulatorModal({
               </div>
             </div>
           ) : (
-            <div style={{ padding: '12px', borderRadius: '6px', backgroundColor: 'var(--color-healthy-bg)', border: '1px solid var(--color-healthy-border)' }}>
-              <strong style={{ color: 'var(--color-healthy)' }}>✓ Normal Baseline State Active</strong>
-              <div style={{ marginTop: '4px', fontSize: '12px', color: 'var(--color-text-muted)' }}>
-                All PHCs operate under standard baseline demand. You can trigger a simulated outbreak below to evaluate system response.
+            <div style={{ padding: '14px', borderRadius: '4px', backgroundColor: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.4)', fontFamily: 'var(--font-mono)' }}>
+              <strong style={{ color: '#6EE7B7', fontSize: '13px' }}>✓ NORMAL BASELINE OPERATIONS ACTIVE</strong>
+              <div style={{ marginTop: '6px', fontSize: '12px', color: '#bec8c8' }}>
+                All monitored PHCs are operating under baseline historical consumption rates. Inject the Dengue surge scenario to evaluate automated anomaly alerts and linear programming redistribution.
               </div>
             </div>
           )}
         </div>
 
-        {/* Buttons */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        {/* Action Buttons */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <button 
             className={`btn ${outbreakActive ? 'btn-outline' : 'btn-primary'}`}
             onClick={() => {
               onToggleOutbreak();
               onClose();
             }}
-            style={{ width: '100%', justifyContent: 'center' }}
+            style={{ width: '100%', justifyContent: 'center', padding: '12px' }}
           >
             {outbreakActive ? (
               <>
-                <RotateCcw size={15} /> Reset System to Normal Baseline
+                <RotateCcw size={16} /> Reset System to Normal Baseline
               </>
             ) : (
               <>
-                <Zap size={15} /> Inject Dengue Spike Scenario (District B)
+                <Zap size={16} color="#FFCB9A" /> Inject Dengue Spike Scenario (District B)
               </>
             )}
           </button>
 
-          <button className="btn btn-outline" onClick={onClose} style={{ width: '100%', justifyContent: 'center' }}>
+          <button className="btn btn-outline btn-sm" onClick={onClose} style={{ width: '100%', justifyContent: 'center' }}>
             Close Panel
           </button>
         </div>

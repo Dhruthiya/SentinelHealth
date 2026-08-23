@@ -10,12 +10,14 @@ import {
   Zap,
   Activity,
   ShieldCheck,
-  Building2
+  Sparkles,
+  ArrowLeft
 } from 'lucide-react';
 
-export default function Sidebar({ activeTab, setActiveTab, outbreakActive, alertCount, transferCount }) {
+export default function Sidebar({ activeTab, setActiveTab, outbreakActive, alertCount, transferCount, onGoHome }) {
   const navItems = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
+    { id: 'hero', label: 'Solarin Core', icon: Sparkles },
     { id: 'map', label: 'PHC Map', icon: MapPin },
     { id: 'inventory', label: 'Inventory', icon: Package },
     { id: 'forecasts', label: 'Demand Forecasts', icon: TrendingUp },
@@ -43,71 +45,126 @@ export default function Sidebar({ activeTab, setActiveTab, outbreakActive, alert
   ];
 
   return (
-    <aside style={{
-      width: 'var(--sidebar-width)',
-      height: '100vh',
-      backgroundColor: 'var(--color-bg-sidebar)',
-      color: '#94A3B8',
-      position: 'fixed',
-      left: 0,
-      top: 0,
-      display: 'flex',
-      flexDirection: 'column',
-      zIndex: 100,
-      borderRight: '1px solid #1E293B'
-    }}>
-      {/* Brand Header */}
-      <div style={{
-        padding: '20px 20px 16px 20px',
-        borderBottom: '1px solid #1E293B',
+    <aside 
+      style={{
+        width: 'var(--sidebar-width)',
+        height: '100vh',
+        backgroundColor: 'rgba(13, 21, 18, 0.95)',
+        backdropFilter: 'blur(20px)',
+        color: '#bec8c8',
+        position: 'fixed',
+        left: 0,
+        top: 0,
         display: 'flex',
         flexDirection: 'column',
-        gap: '6px'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{
-            width: '34px',
-            height: '34px',
-            borderRadius: '8px',
-            backgroundColor: 'var(--color-primary)',
+        zIndex: 100,
+        borderRight: '1px solid rgba(209, 232, 226, 0.15)',
+        boxShadow: '0 0 25px rgba(17, 100, 102, 0.2)'
+      }}
+      className="hidden md:flex"
+    >
+      {/* Brand Header */}
+      <div 
+        style={{
+          padding: '22px 20px 18px 20px',
+          borderBottom: '1px solid rgba(17, 100, 102, 0.35)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '8px'
+        }}
+      >
+        <button
+          onClick={onGoHome}
+          style={{
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            color: '#FFFFFF',
-            fontWeight: 'bold'
-          }}>
+            gap: '12px',
+            textAlign: 'left',
+            padding: 0
+          }}
+          title="Return to Landing Page"
+        >
+          <div 
+            style={{
+              width: '36px',
+              height: '36px',
+              borderRadius: '6px',
+              backgroundColor: '#116466',
+              border: '1px solid #8cd3d4',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#8cd3d4',
+              boxShadow: '0 0 16px rgba(17, 100, 102, 0.6)'
+            }}
+          >
             <Activity size={20} />
           </div>
           <div>
-            <div style={{ color: '#F8FAFC', fontWeight: '700', fontSize: '16px', letterSpacing: '-0.01em' }}>
+            <div 
+              style={{ 
+                color: '#D1E8E2', 
+                fontWeight: '700', 
+                fontSize: '17px', 
+                fontFamily: 'var(--font-title)',
+                letterSpacing: '0.02em' 
+              }}
+              className="text-glow"
+            >
               SentinelHealth
             </div>
-            <div style={{ fontSize: '11px', color: '#64748B', fontWeight: '500' }}>
-              Health Supply Resilience
+            <div style={{ fontSize: '11px', color: '#8cd3d4', fontFamily: 'var(--font-mono)' }}>
+              Supply Resilience
             </div>
           </div>
-        </div>
+        </button>
 
-        <div style={{
-          marginTop: '8px',
-          padding: '4px 8px',
-          borderRadius: '4px',
-          backgroundColor: '#1E293B',
-          fontSize: '10px',
-          fontWeight: '600',
-          color: '#38BDF8',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '6px'
-        }}>
-          <ShieldCheck size={12} /> BRICS AI Challenge — Track 3
+        <div 
+          style={{
+            marginTop: '6px',
+            padding: '4px 8px',
+            borderRadius: '4px',
+            backgroundColor: '#151d1a',
+            border: '1px solid rgba(17, 100, 102, 0.4)',
+            fontSize: '10px',
+            fontFamily: 'var(--font-mono)',
+            fontWeight: '600',
+            color: '#8cd3d4',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px'
+          }}
+        >
+          <ShieldCheck size={12} color="#8cd3d4" /> BRICS AI Challenge — Track 3
         </div>
       </div>
 
-      {/* Main Navigation List */}
+      {/* Navigation List */}
       <nav style={{ flex: 1, padding: '16px 12px', display: 'flex', flexDirection: 'column', gap: '4px', overflowY: 'auto' }}>
-        <div style={{ fontSize: '10px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#475569', padding: '0 8px 6px 8px' }}>
-          Decision Modules
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 10px 8px 10px' }}>
+          <span style={{ fontSize: '10px', fontFamily: 'var(--font-mono)', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.12em', color: '#899393' }}>
+            Decision Intelligence
+          </span>
+          <button
+            onClick={onGoHome}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#8cd3d4',
+              fontSize: '10px',
+              fontFamily: 'var(--font-mono)',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '3px'
+            }}
+            className="hover:underline"
+          >
+            <ArrowLeft size={10} /> Home
+          </button>
         </div>
 
         {navItems.map((item) => {
@@ -124,27 +181,42 @@ export default function Sidebar({ activeTab, setActiveTab, outbreakActive, alert
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                padding: '10px 12px',
-                borderRadius: '6px',
-                border: 'none',
+                padding: '10px 14px',
+                borderRadius: '4px',
+                border: '1px solid transparent',
                 backgroundColor: isActive 
-                  ? 'var(--color-primary)' 
-                  : (isOutbreakItem && outbreakActive ? 'rgba(232, 163, 61, 0.15)' : 'transparent'),
-                color: isActive ? '#FFFFFF' : (isOutbreakItem && outbreakActive ? '#F59E0B' : '#94A3B8'),
-                fontWeight: isActive ? '600' : '500',
+                  ? 'rgba(17, 100, 102, 0.35)' 
+                  : (isOutbreakItem && outbreakActive ? 'rgba(245, 158, 11, 0.15)' : 'transparent'),
+                borderColor: isActive 
+                  ? 'rgba(140, 211, 212, 0.5)' 
+                  : (isOutbreakItem && outbreakActive ? 'rgba(245, 158, 11, 0.4)' : 'transparent'),
+                color: isActive 
+                  ? '#D1E8E2' 
+                  : (isOutbreakItem && outbreakActive ? '#FFCB9A' : '#bec8c8'),
+                fontWeight: isActive ? '700' : '500',
                 fontSize: '13px',
+                fontFamily: 'var(--font-title)',
                 cursor: 'pointer',
                 textAlign: 'left',
-                transition: 'all 0.15s ease'
+                transition: 'all 0.2s ease',
+                boxShadow: isActive ? '0 0 16px rgba(17, 100, 102, 0.4)' : 'none'
               }}
+              className={isActive ? 'text-glow' : 'hover:border-[#116466]/40 hover:text-[#8cd3d4]'}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <Icon size={18} style={{ color: isActive ? '#FFFFFF' : (isOutbreakItem && outbreakActive ? '#F59E0B' : '#64748B') }} />
-                <span>{item.label}</span>
+                <Icon 
+                  size={17} 
+                  style={{ 
+                    color: isActive 
+                      ? '#8cd3d4' 
+                      : (isOutbreakItem && outbreakActive ? '#FFCB9A' : '#899393') 
+                  }} 
+                />
+                <span style={{ letterSpacing: '0.04em' }}>{item.label}</span>
               </div>
 
               {item.badge && (
-                <span className={`badge badge-${item.badgeType}`} style={{ fontSize: '10px', padding: '1px 6px' }}>
+                <span className={`badge badge-${item.badgeType}`} style={{ fontSize: '9px', padding: '1px 6px' }}>
                   {item.badge}
                 </span>
               )}
@@ -158,29 +230,32 @@ export default function Sidebar({ activeTab, setActiveTab, outbreakActive, alert
         })}
       </nav>
 
-      {/* Sidebar Footer: System Status */}
-      <div style={{
-        padding: '14px 16px',
-        borderTop: '1px solid #1E293B',
-        backgroundColor: '#090E17',
-        fontSize: '11px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '6px'
-      }}>
+      {/* Sidebar Footer: System Status Telemetry */}
+      <div 
+        style={{
+          padding: '14px 16px',
+          borderTop: '1px solid rgba(17, 100, 102, 0.35)',
+          backgroundColor: '#090E17',
+          fontSize: '11px',
+          fontFamily: 'var(--font-mono)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '6px'
+        }}
+      >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ color: '#64748B' }}>PostgreSQL DB:</span>
-          <span style={{ color: '#4ADE80', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#4ADE80' }}></span> Connected
+          <span style={{ color: '#899393' }}>POSTGRESQL DB:</span>
+          <span style={{ color: '#6EE7B7', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#10B981', boxShadow: '0 0 6px #10B981' }}></span> CONNECTED
           </span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ color: '#64748B' }}>FL Flower Server:</span>
-          <span style={{ color: '#38BDF8', fontWeight: '600' }}>v1.8 FedAvg</span>
+          <span style={{ color: '#899393' }}>FL FLOWER SERVER:</span>
+          <span style={{ color: '#8cd3d4', fontWeight: '600' }}>v1.8 FedAvg</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ color: '#64748B' }}>ML Engine Latency:</span>
-          <span style={{ color: '#F8FAFC', fontFamily: 'var(--font-mono)' }}>14ms</span>
+          <span style={{ color: '#899393' }}>ML LATENCY:</span>
+          <span style={{ color: '#D1E8E2' }}>14ms REAL-TIME</span>
         </div>
       </div>
     </aside>
