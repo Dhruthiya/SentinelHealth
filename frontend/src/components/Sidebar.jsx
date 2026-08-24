@@ -16,33 +16,98 @@ import {
 
 export default function Sidebar({ activeTab, setActiveTab, outbreakActive, alertCount, transferCount, onGoHome }) {
   const navItems = [
-    { id: 'overview', label: 'Overview', icon: LayoutDashboard },
-    { id: 'hero', label: 'Solarin Core', icon: Sparkles },
-    { id: 'map', label: 'PHC Map', icon: MapPin },
-    { id: 'inventory', label: 'Inventory', icon: Package },
-    { id: 'forecasts', label: 'Demand Forecasts', icon: TrendingUp },
+    { id: 'overview', label: 'Overview', icon: LayoutDashboard, section: 'COMMAND' },
+    { id: 'hero', label: 'Solarin Core', icon: Sparkles, section: 'COMMAND' },
+    { id: 'map', label: 'PHC Map', icon: MapPin, section: 'MONITOR' },
+    { id: 'inventory', label: 'Inventory', icon: Package, section: 'MONITOR' },
+    { id: 'forecasts', label: 'Demand Forecasts', icon: TrendingUp, section: 'PREDICT' },
     { 
       id: 'alerts', 
       label: 'Early Warnings', 
       icon: AlertTriangle, 
       badge: alertCount > 0 ? alertCount : null,
-      badgeType: 'critical'
+      badgeType: 'critical',
+      section: 'PREDICT'
     },
     { 
       id: 'transfers', 
       label: 'Redistribution', 
       icon: Truck, 
       badge: transferCount > 0 ? transferCount : null,
-      badgeType: 'warning'
+      badgeType: 'warning',
+      section: 'RESPOND'
     },
-    { id: 'fl', label: 'Federated Learning', icon: Network },
     { 
       id: 'outbreak', 
       label: 'Outbreak Simulator', 
       icon: Zap, 
-      highlight: outbreakActive 
-    }
+      highlight: outbreakActive,
+      section: 'RESPOND'
+    },
+    { id: 'fl', label: 'Federated Learning', icon: Network, section: 'COLLABORATE' }
   ];
+
+  const renderNavButton = (item) => {
+    const Icon = item.icon;
+    const isActive = activeTab === item.id;
+    const isOutbreakItem = item.id === 'outbreak';
+
+    return (
+      <button
+        key={item.id}
+        onClick={() => setActiveTab(item.id)}
+        style={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '10px 14px',
+          borderRadius: '4px',
+          border: '1px solid transparent',
+          backgroundColor: isActive 
+            ? 'rgba(17, 100, 102, 0.35)' 
+            : (isOutbreakItem && outbreakActive ? 'rgba(245, 158, 11, 0.15)' : 'transparent'),
+          borderColor: isActive 
+            ? 'rgba(140, 211, 212, 0.5)' 
+            : (isOutbreakItem && outbreakActive ? 'rgba(245, 158, 11, 0.4)' : 'transparent'),
+          color: isActive 
+            ? '#D1E8E2' 
+            : (isOutbreakItem && outbreakActive ? '#FFCB9A' : '#bec8c8'),
+          fontWeight: isActive ? '700' : '500',
+          fontSize: '13px',
+          fontFamily: 'var(--font-title)',
+          cursor: 'pointer',
+          textAlign: 'left',
+          transition: 'all 0.2s ease',
+          boxShadow: isActive ? '0 0 16px rgba(17, 100, 102, 0.4)' : 'none'
+        }}
+        className={isActive ? 'text-glow' : 'hover:border-[#116466]/40 hover:text-[#8cd3d4]'}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Icon 
+            size={17} 
+            style={{ 
+              color: isActive 
+                ? '#8cd3d4' 
+                : (isOutbreakItem && outbreakActive ? '#FFCB9A' : '#899393') 
+            }} 
+          />
+          <span style={{ letterSpacing: '0.04em' }}>{item.label}</span>
+        </div>
+
+        {item.badge && (
+          <span className={`badge badge-${item.badgeType}`} style={{ fontSize: '9px', padding: '1px 6px' }}>
+            {item.badge}
+          </span>
+        )}
+        {isOutbreakItem && outbreakActive && (
+          <span className="badge badge-warning" style={{ fontSize: '9px', padding: '1px 5px' }}>
+            ACTIVE
+          </span>
+        )}
+      </button>
+    );
+  };
 
   return (
     <aside 
@@ -63,7 +128,6 @@ export default function Sidebar({ activeTab, setActiveTab, outbreakActive, alert
       }}
       className="hidden md:flex"
     >
-      {/* Brand Header */}
       <div 
         style={{
           padding: '22px 20px 18px 20px',
@@ -142,7 +206,6 @@ export default function Sidebar({ activeTab, setActiveTab, outbreakActive, alert
         </div>
       </div>
 
-      {/* Navigation List */}
       <nav style={{ flex: 1, padding: '16px 12px', display: 'flex', flexDirection: 'column', gap: '4px', overflowY: 'auto' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 10px 8px 10px' }}>
           <span style={{ fontSize: '10px', fontFamily: 'var(--font-mono)', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.12em', color: '#899393' }}>
@@ -167,70 +230,21 @@ export default function Sidebar({ activeTab, setActiveTab, outbreakActive, alert
           </button>
         </div>
 
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = activeTab === item.id;
-          const isOutbreakItem = item.id === 'outbreak';
+        {['COMMAND', 'MONITOR', 'PREDICT', 'RESPOND', 'COLLABORATE'].map(section => {
+          const sectionItems = navItems.filter(item => item.section === section);
+          if (sectionItems.length === 0) return null;
 
           return (
-            <button
-              key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              style={{
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '10px 14px',
-                borderRadius: '4px',
-                border: '1px solid transparent',
-                backgroundColor: isActive 
-                  ? 'rgba(17, 100, 102, 0.35)' 
-                  : (isOutbreakItem && outbreakActive ? 'rgba(245, 158, 11, 0.15)' : 'transparent'),
-                borderColor: isActive 
-                  ? 'rgba(140, 211, 212, 0.5)' 
-                  : (isOutbreakItem && outbreakActive ? 'rgba(245, 158, 11, 0.4)' : 'transparent'),
-                color: isActive 
-                  ? '#D1E8E2' 
-                  : (isOutbreakItem && outbreakActive ? '#FFCB9A' : '#bec8c8'),
-                fontWeight: isActive ? '700' : '500',
-                fontSize: '13px',
-                fontFamily: 'var(--font-title)',
-                cursor: 'pointer',
-                textAlign: 'left',
-                transition: 'all 0.2s ease',
-                boxShadow: isActive ? '0 0 16px rgba(17, 100, 102, 0.4)' : 'none'
-              }}
-              className={isActive ? 'text-glow' : 'hover:border-[#116466]/40 hover:text-[#8cd3d4]'}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <Icon 
-                  size={17} 
-                  style={{ 
-                    color: isActive 
-                      ? '#8cd3d4' 
-                      : (isOutbreakItem && outbreakActive ? '#FFCB9A' : '#899393') 
-                  }} 
-                />
-                <span style={{ letterSpacing: '0.04em' }}>{item.label}</span>
+            <div key={section} style={{ marginBottom: '10px' }}>
+              <div style={{ fontSize: '10px', fontFamily: 'var(--font-mono)', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.12em', color: '#899393', padding: '6px 10px 4px 10px' }}>
+                {section}
               </div>
-
-              {item.badge && (
-                <span className={`badge badge-${item.badgeType}`} style={{ fontSize: '9px', padding: '1px 6px' }}>
-                  {item.badge}
-                </span>
-              )}
-              {isOutbreakItem && outbreakActive && (
-                <span className="badge badge-warning" style={{ fontSize: '9px', padding: '1px 5px' }}>
-                  ACTIVE
-                </span>
-              )}
-            </button>
+              {sectionItems.map(renderNavButton)}
+            </div>
           );
         })}
       </nav>
 
-      {/* Sidebar Footer: System Status Telemetry */}
       <div 
         style={{
           padding: '14px 16px',

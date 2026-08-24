@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   Building2, 
   AlertTriangle, 
@@ -8,7 +8,11 @@ import {
   CheckCircle2, 
   TrendingDown, 
   ShieldAlert,
-  ChevronRight
+  ChevronRight,
+  Activity,
+  Users,
+  BedDouble,
+  TrendingUp
 } from 'lucide-react';
 import PhcMap from './PhcMap';
 
@@ -22,7 +26,6 @@ export default function Overview({
 }) {
   const [selectedPhc, setSelectedPhc] = useState(null);
 
-  // Filter PHCs by district if selected
   const filteredPhcs = selectedDistrict === 'ALL' 
     ? phcs 
     : phcs.filter(p => p.district === selectedDistrict);
@@ -30,11 +33,44 @@ export default function Overview({
   const criticalAlerts = alerts.filter(a => a.severity === 'CRITICAL');
   const pendingTransfers = transfers.filter(t => t.status === 'PENDING');
   const criticalPhcCount = filteredPhcs.filter(p => p.status === 'CRITICAL').length;
+  const warningPhcCount = filteredPhcs.filter(p => p.status === 'WARNING').length;
+  const healthyPhcCount = filteredPhcs.filter(p => p.status === 'HEALTHY').length;
+
+  const resilienceScore = useMemo(() => {
+    const totalPhcs = filteredPhcs.length;
+    if (totalPhcs === 0) return 0;
+    
+    const healthyRatio = healthyPhcCount / totalPhcs;
+    const avgStaffAttendance = filteredPhcs.reduce((sum, p) => sum + (p.staffPresent / p.staffScheduled), 0) / totalPhcs;
+    const avgBedOccupancy = filteredPhcs.reduce((sum, p) => sum + (p.bedsOccupied / p.bedsTotal), 0) / totalPhcs;
+    const medicineHealth = 1 - (criticalAlerts.length / Math.max(1, totalPhcs * 2));
+    
+    const score = (healthyRatio * 40) + (avgStaffAttendance * 25) + ((1 - avgBedOccupancy) * 20) + (medicineHealth * 15);
+    return Math.round(Math.max(0, Math.min(100, score)));
+  }, [filteredPhcs, healthyPhcCount, criticalAlerts]);
+
+  const systemStatus = useMemo(() => {
+    if (resilienceScore >= 75) return { status: 'STABLE', color: '#6EE7B7', border: 'rgba(16, 185, 129, 0.45)' };
+    if (resilienceScore >= 50) return { status: 'AT RISK', color: '#FFCB9A', border: 'rgba(245, 158, 11, 0.45)' };
+    return { status: 'CRITICAL', color: '#FF7B7B', border: 'rgba(239, 68, 68, 0.55)' };
+  }, [resilienceScore]);
+
+  const totalBeds = filteredPhcs.reduce((sum, p) => sum + p.bedsTotal, 0);
+  const occupiedBeds = filteredPhcs.reduce((sum, p) => sum + p.bedsOccupied, 0);
+  const totalStaff = filteredPhcs.reduce((sum, p) => sum + p.staffScheduled, 0);
+  const presentStaff = filteredPhcs.reduce((sum, p) => sum + p.staffPresent, 0);
+  const totalPopulation = filteredPhcs.reduce((sum, p) => sum + p.population, 0);
+  const currentPatientFootfall = filteredPhcs.reduce((sum, p) => sum + (p.patientFootfall || 0), 0);
+  const forecastedPatientFootfall = filteredPhcs.reduce((sum, p) => sum + (p.forecastedFootfall || 0), 0);
+  const footfallDelta = currentPatientFootfall > 0
+    ? Math.round(((forecastedPatientFootfall - currentPatientFootfall) / currentPatientFootfall) * 100)
+    : 0;
+  const bedOccupancyPct = totalBeds > 0 ? Math.round((occupiedBeds / totalBeds) * 100) : 0;
+  const staffAttendancePct = totalStaff > 0 ? Math.round((presentStaff / totalStaff) * 100) : 0;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       
-      {/* Overview System Title & Subheader */}
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', gap: '16px' }}>
         <div>
           <div style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', color: '#8cd3d4', textTransform: 'uppercase', letterSpacing: '0.2em' }}>
@@ -66,9 +102,85 @@ export default function Overview({
         </div>
       </div>
 
-      {/* KPI Cards Grid */}
+      <div className="sh-card" style={{ 
+        background: 'rgba(13, 21, 18, 0.95)',
+        borderLeft: `6px solid ${systemStatus.color}`,
+        borderColor: systemStatus.border,
+        padding: '22px'
+      }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '16px' }}>
+          <div>
+            <div style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.12em', color: '#8cd3d4', marginBottom: '8px' }}>
+              National Health Resilience Status
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '16px' }}>
+              <div style={{ fontSize: '32px', fontWeight: '800', color: systemStatus.color, lineHeight: '1', fontFamily: 'var(--font-title)' }} className="text-glow">
+                {systemStatus.status}
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <div style={{ fontSize: '14px', color: '#D1E8E2', fontWeight: '600', fontFamily: 'var(--font-mono)' }}>
+                  Resilience Score: <span style={{ fontSize: '24px', fontWeight: '700', color: systemStatus.color }}>{resilienceScore}</span> / 100
+                </div>
+                <div style={{ fontSize: '12px', color: '#bec8c8', fontFamily: 'var(--font-mono)' }}>
+                  Based on {filteredPhcs.length} PHCs • {criticalPhcCount} Critical • {warningPhcCount} At Risk
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontSize: '11px', color: '#899393', fontFamily: 'var(--font-mono)', marginBottom: '4px' }}>Serving Population</div>
+            <div style={{ fontSize: '20px', fontWeight: '700', color: '#D1E8E2', fontFamily: 'var(--font-title)' }}>
+              {totalPopulation.toLocaleString()}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {criticalAlerts.length > 0 && (
+        <div className="sh-card" style={{ border: '1px solid rgba(239, 68, 68, 0.5)', backgroundColor: 'rgba(239, 68, 68, 0.12)' }}>
+          <div className="sh-card-header" style={{ borderBottom: '1px solid rgba(239, 68, 68, 0.35)', paddingBottom: '12px' }}>
+            <div className="sh-card-title" style={{ color: '#FF7B7B' }}>
+              <AlertTriangle size={18} />
+              <span>CRITICAL RISKS — Immediate Action Required</span>
+            </div>
+            <button className="btn btn-outline btn-sm" onClick={() => onNavigate('alerts')} style={{ borderColor: 'rgba(239, 68, 68, 0.5)', color: '#FF7B7B' }}>
+              View All ({criticalAlerts.length})
+            </button>
+          </div>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(3, criticalAlerts.length)}, minmax(160px, 1fr))`, gap: '16px', marginTop: '16px' }}>
+            {criticalAlerts.slice(0, 3).map((alert) => (
+              <div key={alert.id} style={{ 
+                padding: '16px', 
+                backgroundColor: '#0d1512', 
+                borderRadius: '6px', 
+                border: '1px solid rgba(239, 68, 68, 0.4)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px'
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '11px', fontWeight: '700', color: '#bec8c8', fontFamily: 'var(--font-mono)' }}>{alert.phcName}</span>
+                  <span style={{ fontSize: '32px', fontWeight: '800', color: '#FF7B7B', lineHeight: '1', fontFamily: 'var(--font-title)' }}>
+                    {alert.daysToStockout}
+                  </span>
+                </div>
+                <div style={{ fontSize: '13px', fontWeight: '600', color: '#D1E8E2' }}>
+                  {alert.medicineName}
+                </div>
+                <div style={{ fontSize: '11px', color: '#FF7B7B', fontWeight: '600', fontFamily: 'var(--font-mono)' }}>
+                  DAYS TO STOCK-OUT
+                </div>
+                <div style={{ fontSize: '12px', color: '#bec8c8', marginTop: '4px' }}>
+                  {alert.message}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="grid-4">
-        {/* KPI 1: Monitored PHCs */}
         <div className="sh-card tech-glow-hover" style={{ borderLeft: '4px solid #116466' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
@@ -89,7 +201,6 @@ export default function Overview({
           </div>
         </div>
 
-        {/* KPI 2: Stock-outs Predicted */}
         <div className="sh-card tech-glow-hover" style={{ borderLeft: '4px solid #EF4444' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
@@ -110,7 +221,6 @@ export default function Overview({
           </div>
         </div>
 
-        {/* KPI 3: Pending Transfers */}
         <div className="sh-card tech-glow-hover" style={{ borderLeft: '4px solid #F59E0B' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
@@ -131,7 +241,6 @@ export default function Overview({
           </div>
         </div>
 
-        {/* KPI 4: Federated Learning Status */}
         <div className="sh-card tech-glow-hover" style={{ borderLeft: '4px solid #8cd3d4' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
@@ -153,10 +262,62 @@ export default function Overview({
         </div>
       </div>
 
-      {/* Main Split Content: Spatial Map (Left) + Action & Alerts Panel (Right) */}
+      <div className="grid-4">
+        <div className="sh-card tech-glow-hover" style={{ borderLeft: '4px solid #F59E0B' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div>
+              <div className="sh-card-subtitle" style={{ textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: 'var(--font-mono)' }}>Bed Capacity</div>
+              <div style={{ fontSize: '24px', fontWeight: '700', color: '#D1E8E2', marginTop: '4px', fontFamily: 'var(--font-title)' }}>
+                {occupiedBeds} <span style={{ fontSize: '14px', color: '#bec8c8', fontWeight: '400', fontFamily: 'var(--font-mono)' }}>/ {totalBeds}</span>
+              </div>
+            </div>
+            <div style={{ padding: '8px', borderRadius: '4px', backgroundColor: 'rgba(245, 158, 11, 0.2)', color: '#FFCB9A', border: '1px solid rgba(245, 158, 11, 0.4)' }}>
+              <BedDouble size={20} />
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '12px', fontSize: '12px', color: '#bec8c8', fontFamily: 'var(--font-mono)' }}>
+            <span>{bedOccupancyPct}% occupancy</span>
+          </div>
+        </div>
+
+        <div className="sh-card tech-glow-hover" style={{ borderLeft: '4px solid #116466' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div>
+              <div className="sh-card-subtitle" style={{ textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: 'var(--font-mono)' }}>Staff On Duty</div>
+              <div style={{ fontSize: '24px', fontWeight: '700', color: '#D1E8E2', marginTop: '4px', fontFamily: 'var(--font-title)' }}>
+                {presentStaff} <span style={{ fontSize: '14px', color: '#bec8c8', fontWeight: '400', fontFamily: 'var(--font-mono)' }}>/ {totalStaff}</span>
+              </div>
+            </div>
+            <div style={{ padding: '8px', borderRadius: '4px', backgroundColor: 'rgba(17, 100, 102, 0.3)', color: '#8cd3d4', border: '1px solid rgba(140, 211, 212, 0.4)' }}>
+              <Users size={20} />
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '12px', fontSize: '12px', color: '#bec8c8', fontFamily: 'var(--font-mono)' }}>
+            <span>{staffAttendancePct}% attendance</span>
+          </div>
+        </div>
+
+        <div className="sh-card tech-glow-hover" style={{ borderLeft: '4px solid #8cd3d4', gridColumn: 'span 2' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div>
+              <div className="sh-card-subtitle" style={{ textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: 'var(--font-mono)' }}>Patient Footfall</div>
+              <div style={{ fontSize: '24px', fontWeight: '700', color: '#D1E8E2', marginTop: '4px', fontFamily: 'var(--font-title)' }}>
+                {currentPatientFootfall} <span style={{ fontSize: '14px', color: '#bec8c8', fontWeight: '400', fontFamily: 'var(--font-mono)' }}>patients/day</span>
+              </div>
+            </div>
+            <div style={{ padding: '8px', borderRadius: '4px', backgroundColor: 'rgba(17, 100, 102, 0.3)', color: '#8cd3d4', border: '1px solid rgba(140, 211, 212, 0.4)' }}>
+              <Users size={20} />
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '12px', fontSize: '12px', color: '#bec8c8', fontFamily: 'var(--font-mono)' }}>
+            <TrendingUp size={13} style={{ color: '#FFCB9A' }} />
+            <span>Forecast: <strong style={{ color: '#D1E8E2' }}>{forecastedPatientFootfall}</strong> ({footfallDelta >= 0 ? '+' : ''}{footfallDelta}%)</span>
+          </div>
+        </div>
+      </div>
+
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '24px' }}>
         
-        {/* Spatial Map Module */}
         <div className="sh-card" style={{ display: 'flex', flexDirection: 'column', minHeight: '620px', gridColumn: 'span 2' }}>
           <div className="sh-card-header">
             <div>
@@ -183,10 +344,8 @@ export default function Overview({
           </div>
         </div>
 
-        {/* Right Side: Actionable Transfers + Urgent Alerts */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', gridColumn: 'span 1' }}>
           
-          {/* Top Urgent Transfer Recommendation Card */}
           <div className="sh-card" style={{ border: '1px solid rgba(245, 158, 11, 0.4)', backgroundColor: 'rgba(21, 29, 26, 0.95)' }}>
             <div className="sh-card-header" style={{ marginBottom: '14px', paddingBottom: '10px' }}>
               <div className="sh-card-title" style={{ fontSize: '13px' }}>
@@ -248,7 +407,6 @@ export default function Overview({
             )}
           </div>
 
-          {/* Early Warning Alerts Quick Feed */}
           <div className="sh-card" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
             <div className="sh-card-header">
               <div className="sh-card-title">
@@ -287,6 +445,40 @@ export default function Overview({
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+
+          <div className="sh-card" style={{ padding: '16px' }}>
+            <div style={{ fontSize: '12px', fontWeight: '700', color: '#D1E8E2', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'var(--font-mono)' }}>
+              <Activity size={14} color="#8cd3d4" />
+              AI DECISION TIMELINE
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', fontFamily: 'var(--font-mono)' }}>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#EF4444' }}></div>
+                <span style={{ color: '#bec8c8' }}>Stock-out risk detected</span>
+                <span style={{ marginLeft: 'auto', color: '#899393' }}>2 min ago</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', fontFamily: 'var(--font-mono)' }}>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#F59E0B' }}></div>
+                <span style={{ color: '#bec8c8' }}>Demand forecast generated</span>
+                <span style={{ marginLeft: 'auto', color: '#899393' }}>4 min ago</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', fontFamily: 'var(--font-mono)' }}>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#116466' }}></div>
+                <span style={{ color: '#bec8c8' }}>Source PHCs identified</span>
+                <span style={{ marginLeft: 'auto', color: '#899393' }}>5 min ago</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', fontFamily: 'var(--font-mono)' }}>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#8cd3d4' }}></div>
+                <span style={{ color: '#bec8c8' }}>Redistribution recommendation generated</span>
+                <span style={{ marginLeft: 'auto', color: '#899393' }}>6 min ago</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', fontFamily: 'var(--font-mono)' }}>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#10B981' }}></div>
+                <span style={{ color: '#bec8c8' }}>Awaiting human approval</span>
+                <span style={{ marginLeft: 'auto', color: '#6EE7B7', fontWeight: '600' }}>NOW</span>
+              </div>
             </div>
           </div>
 

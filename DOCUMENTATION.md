@@ -55,6 +55,15 @@ The system is designed around a simple principle:
 
 For the BRICS context, SentinelHealth additionally demonstrates how participating countries can collaborate on predictive models while keeping their underlying health-resource data within their own national infrastructure.
 
+## Live Deployments
+
+The platform is deployed and accessible at:
+
+- **Frontend Dashboard**: [https://frontend-smoky-pi-12.vercel.app](https://frontend-smoky-pi-12.vercel.app) - Interactive dashboard with all features
+- **Backend API**: [https://backend-weld-three-59.vercel.app](https://backend-weld-three-59.vercel.app) - REST API with WebSocket support
+
+Both deployments are fully functional and demonstrate the complete system capabilities including the enhanced UI/UX features, operational KPIs, and federated learning simulation.
+
 ---
 
 # 2. Problem Statement
@@ -228,11 +237,19 @@ This demonstrates the **federated-learning concept**. It should not be interpret
 
 The dashboard provides a consolidated view of:
 
+- **National Health Resilience Score** - System-wide health status (STABLE/AT RISK/CRITICAL) based on calculated metrics
 - medicine stock
 - bed occupancy
 - staff availability
+- patient footfall with forecasting
 - PHC location
 - resource urgency
+
+The dashboard now features an operational hierarchy prioritizing:
+1. Medicine availability (most critical operationally)
+2. Bed capacity utilization
+3. Staff on duty/attendance
+4. Patient footfall with trend forecasting
 
 The hackathon prototype uses synthetic event generation to simulate continuously changing PHC conditions.
 
@@ -298,7 +315,16 @@ The model predicts a stock-out within a defined number of days.
 
 Observed consumption significantly deviates from expected patterns.
 
-Alerts are ranked by severity and displayed on the dashboard.
+Alerts are ranked by severity and displayed on the dashboard with a prominent **Critical Risks Section** for immediate action items.
+
+### Enhanced Dashboard Features
+
+The dashboard now includes:
+
+- **AI Decision Timeline** - Visual processing steps from detection to human approval
+- **Privacy-Preserving Flow Explanation** - Clear demonstration of how federated learning works without sharing patient data
+- **Before/After Impact Analysis** - Shows the projected impact of redistribution recommendations
+- **Real-time Telemetry** - WebSocket-based live updates for system status
 
 ---
 
@@ -648,14 +674,16 @@ It does not claim to be a production-ready national healthcare infrastructure.
 |---|---|---|
 | Backend | FastAPI / Python | APIs and application logic |
 | Database | PostgreSQL | PHC and resource data |
-| Frontend | React + Vite + TailwindCSS | Dashboard |
+| Frontend | React + Vite + TailwindCSS | Dashboard with enhanced UI/UX |
 | Charts | Recharts | Forecast and performance visualization |
 | Maps | Leaflet.js | PHC geographic visualization |
+| Icons | Lucide React | Modern icon system |
 | Forecasting | Prophet / ARIMA | Baseline forecasting |
 | Federated Model | Parameterized ML model | Federated forecasting |
 | Federated Learning | Flower | FL orchestration |
 | Optimization | SciPy `linprog` | Redistribution optimization |
 | Real-time updates | WebSocket | Dashboard event updates |
+| Deployment | Vercel | Cloud deployment for frontend and backend |
 | Containers | Docker / Docker Compose | Reproducible deployment |
 | CI | GitHub Actions | Automated testing |
 | Authentication | JWT / RBAC | Future production capability |

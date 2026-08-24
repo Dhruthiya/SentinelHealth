@@ -23,44 +23,39 @@ The **SentinelHealth** platform and documentation adhere to a strict, high-trust
 
 Healthcare facilities can face medicine shortages because demand fluctuates, inventory is fragmented, and supply-chain decisions are often reactive.
 
-
 **SentinelHealth** transforms healthcare resource data into predictive and actionable intelligence by combining demand forecasting, stock-out prediction, early-warning alerts, optimization, and federated learning.
 
 The platform enables healthcare administrators to:
 
-- Monitor Primary Health Centres (PHCs)
-- Track medicine inventory
-- Forecast future demand
-- Predict potential stock-outs
-- Detect abnormal demand spikes
-- Recommend medicine redistribution
-- Simulate outbreak scenarios
+- Monitor Primary Health Centres (PHCs) and national health resilience with calculated resilience scores
+- Track medicine inventory, bed capacity, and personnel availability
+- Monitor patient footfall and demand patterns with forecasting
+- Forecast future demand with transparent reasoning and confidence intervals
+- Predict potential stock-outs with clear timelines and severity rankings
+- Detect abnormal demand spikes and consumption anomalies
+- Recommend medicine redistribution with before/after impact analysis
+- Simulate outbreak scenarios and projected system response
 - Demonstrate privacy-aware collaborative ML through Federated Learning
+- Follow clear MONITOR → PREDICT → RESPOND → COLLABORATE workflow
+
+
+*For detailed project information, see [ABOUT.md](ABOUT.md)*
 
 ```text
 PHC / HEALTHCARE DATA
         │
         ▼
-1. DATA INGESTION ──────▶ PHC, inventory & demand data
+1. MONITOR ──────▶ PHC status, inventory, beds, staff, patient footfall
         │
         ▼
-2. AI FORECASTING ──────▶ Future medicine demand
+2. PREDICT ──────▶ AI demand forecasting, stock-out risk detection
         │
         ▼
-3. STOCK-OUT PREDICTION ▶ Days-to-stock-out + risk level
+3. RESPOND ──────▶ AI redistribution recommendations, human approval
         │
         ▼
-4. EARLY WARNING ───────▶ Critical / High / Medium / Low alerts
-        │
-        ▼
-5. OPTIMIZATION ────────▶ Recommended medicine redistribution
-        │
-        ▼
-6. HUMAN REVIEW ────────▶ Administrator approval
-        │
-        ▼
-7. FEDERATED LEARNING ──▶ Collaborative model training
-````
+4. COLLABORATE ──▶ Federated learning across BRICS nations
+```
 
 ---
 
@@ -68,15 +63,17 @@ PHC / HEALTHCARE DATA
 
 | Feature                 | Description                                                     |
 | ----------------------- | --------------------------------------------------------------- |
-| 📊 PHC Monitoring       | Monitor healthcare centres, inventory and resource availability |
-| 🔮 Demand Forecasting   | Predict future medicine requirements                            |
-| 🚨 Stock-Out Prediction | Identify medicines at risk of running out                       |
+| 📊 PHC Monitoring       | Monitor healthcare centres, inventory and resource availability with national resilience scoring |
+| 🔮 Demand Forecasting   | Predict future medicine requirements with confidence intervals  |
+| 🚨 Stock-Out Prediction | Identify medicines at risk of running out with severity rankings |
 | 🔔 Early-Warning Alerts | Generate risk-based alerts before shortages become critical     |
-| 🚚 Redistribution       | Recommend optimized transfers between PHCs                      |
+| 🚚 Redistribution       | Recommend optimized transfers between PHCs with impact analysis  |
 | 🦠 Outbreak Simulation  | Simulate sudden demand spikes and observe system response       |
-| 🌐 Federated Learning   | Simulate collaborative ML across BRICS nodes                    |
+| 🌐 Federated Learning   | Simulate collaborative ML across BRICS nodes with privacy preservation |
 | 🗺️ PHC Map             | Visualize healthcare facilities and their resource status       |
 | 👤 Human-in-the-Loop    | Allow administrators to review and approve recommendations      |
+| 🎯 Operational KPIs    | Bed capacity, staff availability, patient footfall tracking     |
+| 📈 AI Decision Timeline | Visual processing steps from detection to human approval       |
 
 ---
 
@@ -261,15 +258,19 @@ The scenario can be reset after demonstration.
 
 The dashboard provides:
 
-* Total PHCs
-* Medicine availability
-* Critical alerts
-* Predicted stock-outs
-* Demand forecasts
-* PHC map
-* Inventory status
-* Redistribution recommendations
-* Federated Learning status
+* **National Health Resilience Score** - System-wide health status (STABLE/AT RISK/CRITICAL)
+* **Operational KPI Hierarchy** - Medicine availability, bed capacity, staff, patient footfall
+* **Critical Risks Section** - Immediate action items prominently displayed
+* **AI Decision Timeline** - Visual processing steps from detection to approval
+* **Total PHCs** - Monitored facilities with status filtering
+* **Medicine availability** - Real-time inventory tracking
+* **Critical alerts** - Severity-based early warnings
+* **Predicted stock-outs** - Days-to-stockout calculations
+* **Demand forecasts** - Time-series predictions with confidence bands
+* **PHC map** - Geographic visualization with status indicators
+* **Inventory status** - Category and status filtering
+* **Redistribution recommendations** - SciPy optimized transfer plans
+* **Federated Learning status** - BRICS node performance and privacy metrics
 
 ---
 

@@ -14,7 +14,9 @@ import {
   Cpu, 
   Play, 
   Lock, 
-  Globe2 
+  Globe2,
+  Database,
+  ShieldCheck
 } from 'lucide-react';
 
 export default function FederatedLearning({ flNodes, performanceHistory }) {
@@ -109,8 +111,40 @@ export default function FederatedLearning({ flNodes, performanceHistory }) {
           <span className="badge badge-info">100% Privacy Compliant</span>
         </div>
 
+        {/* Privacy-Preserving Flow Explanation */}
+        <div style={{ 
+          marginTop: '12px', 
+          padding: '16px', 
+          borderRadius: '8px', 
+          backgroundColor: 'var(--color-info-bg)', 
+          border: '1px solid var(--color-info-border)',
+          fontSize: '12px'
+        }}>
+          <div style={{ fontWeight: '700', color: 'var(--color-info)', marginBottom: '8px' }}>
+            HOW IT WORKS: Collaborative Learning Without Sharing Patient Data
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Database size={14} style={{ color: 'var(--color-primary)' }} />
+              <span><strong>Each country keeps patient data local</strong> — No raw health records leave the country</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Cpu size={14} style={{ color: 'var(--color-primary)' }} />
+              <span><strong>Local model training</strong> — Each node trains on its own data</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Network size={14} style={{ color: 'var(--color-primary)' }} />
+              <span><strong>Only model updates shared</strong> — Mathematical weights aggregated centrally</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <ShieldCheck size={14} style={{ color: 'var(--color-primary)' }} />
+              <span><strong>Global model distributed</strong> — Improved model sent back to all countries</span>
+            </div>
+          </div>
+        </div>
+
         {/* Node Cards Row */}
-        <div className="grid-3" style={{ marginTop: '10px' }}>
+        <div className="grid-3" style={{ marginTop: '16px' }}>
           {flNodes.map(node => (
             <div 
               key={node.id} 

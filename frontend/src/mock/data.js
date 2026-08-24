@@ -16,7 +16,10 @@ export const INITIAL_PHCS = [
     staffScheduled: 10,
     status: 'CRITICAL', // CRITICAL, WARNING, HEALTHY
     criticalMedicines: ['Paracetamol 500mg', 'ORS Packets'],
-    lastUpdated: '10 mins ago'
+    lastUpdated: '10 mins ago',
+    patientFootfall: 145,
+    patientFootfallTrend: '+27%',
+    forecastedFootfall: 184
   },
   {
     id: 'PHC-042',
@@ -33,7 +36,10 @@ export const INITIAL_PHCS = [
     staffScheduled: 15,
     status: 'HEALTHY',
     criticalMedicines: [],
-    lastUpdated: '4 mins ago'
+    lastUpdated: '4 mins ago',
+    patientFootfall: 89,
+    patientFootfallTrend: '+5%',
+    forecastedFootfall: 94
   },
   {
     id: 'PHC-009',
@@ -50,7 +56,10 @@ export const INITIAL_PHCS = [
     staffScheduled: 20,
     status: 'WARNING',
     criticalMedicines: ['Amoxicillin 250mg'],
-    lastUpdated: '2 mins ago'
+    lastUpdated: '2 mins ago',
+    patientFootfall: 178,
+    patientFootfallTrend: '+12%',
+    forecastedFootfall: 199
   },
   {
     id: 'PHC-031',
@@ -67,7 +76,10 @@ export const INITIAL_PHCS = [
     staffScheduled: 8,
     status: 'HEALTHY',
     criticalMedicines: [],
-    lastUpdated: '15 mins ago'
+    lastUpdated: '15 mins ago',
+    patientFootfall: 67,
+    patientFootfallTrend: '+3%',
+    forecastedFootfall: 69
   },
   {
     id: 'PHC-055',
@@ -84,7 +96,10 @@ export const INITIAL_PHCS = [
     staffScheduled: 12,
     status: 'CRITICAL',
     criticalMedicines: ['Artemether Injection', 'IV Saline 500ml'],
-    lastUpdated: '1 min ago'
+    lastUpdated: '1 min ago',
+    patientFootfall: 156,
+    patientFootfallTrend: '+31%',
+    forecastedFootfall: 204
   },
   {
     id: 'PHC-062',
@@ -101,7 +116,10 @@ export const INITIAL_PHCS = [
     staffScheduled: 10,
     status: 'HEALTHY',
     criticalMedicines: [],
-    lastUpdated: '8 mins ago'
+    lastUpdated: '8 mins ago',
+    patientFootfall: 92,
+    patientFootfallTrend: '+8%',
+    forecastedFootfall: 99
   }
 ];
 

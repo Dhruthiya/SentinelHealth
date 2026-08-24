@@ -2,6 +2,7 @@ import React from 'react';
 import { 
   Truck, 
   ArrowRight, 
+  ArrowDown,
   CheckCircle2, 
   ShieldCheck, 
   X,
@@ -97,12 +98,30 @@ export default function Transfers({ transfers, onApproveTransfer }) {
                   </div>
 
                   <h3 style={{ fontSize: '17px', fontWeight: '700', color: '#D1E8E2', fontFamily: 'var(--font-title)' }}>
-                    Transfer {trf.quantity} units of <span style={{ color: '#8cd3d4' }}>{trf.medicineName}</span>
+                    AI Recommendation: Transfer {trf.quantity} units of <span style={{ color: '#8cd3d4' }}>{trf.medicineName}</span>
                   </h3>
 
-                  {/* Source -> Destination Visual Block */}
-                  <div 
-                    style={{
+                  <div style={{ marginTop: '16px' }}>
+                    <div style={{ 
+                      padding: '12px', 
+                      borderRadius: '4px', 
+                      backgroundColor: 'rgba(239, 68, 68, 0.12)', 
+                      border: '1px solid rgba(239, 68, 68, 0.4)',
+                      marginBottom: '12px'
+                    }}>
+                      <div style={{ fontSize: '11px', fontWeight: '700', color: '#FF7B7B', marginBottom: '4px', fontFamily: 'var(--font-mono)' }}>
+                        PROBLEM: PREDICTED SHORTAGE
+                      </div>
+                      <div style={{ fontSize: '13px', color: '#D1E8E2' }}>
+                        <strong>{trf.destPhcName}</strong> will run out in <strong style={{ color: '#FF7B7B' }}>{trf.destShortageDays} days</strong>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'center', margin: '8px 0' }}>
+                      <ArrowDown size={20} color="#8cd3d4" />
+                    </div>
+
+                    <div style={{
                       display: 'flex',
                       flexWrap: 'wrap',
                       alignItems: 'center',
@@ -112,30 +131,63 @@ export default function Transfers({ transfers, onApproveTransfer }) {
                       padding: '14px 18px',
                       borderRadius: '4px',
                       border: '1px solid rgba(17, 100, 102, 0.4)',
-                      margin: '14px 0'
-                    }}
-                  >
-                    <div>
-                      <div style={{ fontSize: '10px', fontWeight: '700', color: '#899393', letterSpacing: '0.08em', fontFamily: 'var(--font-mono)' }}>SOURCE (SURPLUS AVAILABLE)</div>
-                      <div style={{ fontSize: '15px', fontWeight: '700', color: '#D1E8E2', marginTop: '2px', fontFamily: 'var(--font-title)' }}>{trf.sourcePhcName}</div>
-                      <div style={{ fontSize: '11px', color: '#6EE7B7', fontWeight: '600', fontFamily: 'var(--font-mono)' }}>Surplus: {trf.sourceSurplus} units</div>
+                      margin: '12px 0'
+                    }}>
+                      <div>
+                        <div style={{ fontSize: '10px', fontWeight: '700', color: '#899393', letterSpacing: '0.08em', fontFamily: 'var(--font-mono)' }}>SOURCE (SURPLUS)</div>
+                        <div style={{ fontSize: '15px', fontWeight: '700', color: '#D1E8E2', marginTop: '2px', fontFamily: 'var(--font-title)' }}>{trf.sourcePhcName}</div>
+                        <div style={{ fontSize: '11px', color: '#6EE7B7', fontWeight: '600', fontFamily: 'var(--font-mono)' }}>Available: {trf.sourceSurplus} units</div>
+                      </div>
+
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '0 8px' }}>
+                        <ArrowRight size={22} color="#8cd3d4" />
+                        <div style={{ fontSize: '10px', color: '#8cd3d4', marginTop: '2px', fontFamily: 'var(--font-mono)' }}>{trf.distanceKm} km</div>
+                      </div>
+
+                      <div>
+                        <div style={{ fontSize: '10px', fontWeight: '700', color: '#899393', letterSpacing: '0.08em', fontFamily: 'var(--font-mono)' }}>DESTINATION (SHORTAGE)</div>
+                        <div style={{ fontSize: '15px', fontWeight: '700', color: '#FF7B7B', marginTop: '2px', fontFamily: 'var(--font-title)' }}>{trf.destPhcName}</div>
+                        <div style={{ fontSize: '11px', color: '#FF9E9E', fontWeight: '600', fontFamily: 'var(--font-mono)' }}>Transfer: {trf.quantity} units</div>
+                      </div>
                     </div>
 
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '0 8px' }}>
-                      <ArrowRight size={22} color="#8cd3d4" />
-                      <div style={{ fontSize: '10px', color: '#8cd3d4', marginTop: '2px', fontFamily: 'var(--font-mono)' }}>{trf.distanceKm} km</div>
+                    <div style={{ display: 'flex', justifyContent: 'center', margin: '8px 0' }}>
+                      <ArrowDown size={20} color="#8cd3d4" />
                     </div>
 
-                    <div>
-                      <div style={{ fontSize: '10px', fontWeight: '700', color: '#899393', letterSpacing: '0.08em', fontFamily: 'var(--font-mono)' }}>DESTINATION (PREDICTED SHORTAGE)</div>
-                      <div style={{ fontSize: '15px', fontWeight: '700', color: '#FF7B7B', marginTop: '2px', fontFamily: 'var(--font-title)' }}>{trf.destPhcName}</div>
-                      <div style={{ fontSize: '11px', color: '#FF9E9E', fontWeight: '600', fontFamily: 'var(--font-mono)' }}>Shortage in: {trf.destShortageDays} days</div>
+                    <div style={{ 
+                      padding: '12px', 
+                      borderRadius: '4px', 
+                      backgroundColor: 'rgba(16, 185, 129, 0.12)', 
+                      border: '1px solid rgba(16, 185, 129, 0.4)'
+                    }}>
+                      <div style={{ fontSize: '11px', fontWeight: '700', color: '#6EE7B7', marginBottom: '4px', fontFamily: 'var(--font-mono)' }}>
+                        PROJECTED IMPACT AFTER TRANSFER
+                      </div>
+                      <div style={{ fontSize: '13px', color: '#D1E8E2' }}>
+                        <strong>{trf.destPhcName}</strong> stock-out risk extended by <strong style={{ color: '#6EE7B7' }}>+{Math.round(trf.quantity / Math.max(1, trf.destShortageDays * 10))} days</strong>
+                      </div>
+                      <div style={{ fontSize: '11px', color: '#bec8c8', marginTop: '4px', fontFamily: 'var(--font-mono)' }}>
+                        {trf.impactMessage} (Transit: ~{trf.estTimeMins} mins)
+                      </div>
                     </div>
                   </div>
 
-                  <div style={{ fontSize: '12px', color: '#bec8c8', display: 'flex', flexWrap: 'wrap', gap: '16px', fontFamily: 'var(--font-mono)' }}>
-                    <span>Estimated transit: <strong style={{ color: '#D1E8E2' }}>~{trf.estTimeMins} mins</strong></span>
-                    <span>Outcome: <strong style={{ color: '#6EE7B7' }}>{trf.impactMessage}</strong></span>
+                  <div style={{ 
+                    marginTop: '16px', 
+                    padding: '8px 12px', 
+                    borderRadius: '4px', 
+                    backgroundColor: 'rgba(17, 100, 102, 0.2)', 
+                    border: '1px solid rgba(140, 211, 212, 0.35)',
+                    fontSize: '11px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    fontFamily: 'var(--font-mono)',
+                    color: '#bec8c8'
+                  }}>
+                    <ShieldCheck size={12} color="#8cd3d4" />
+                    <span><strong style={{ color: '#D1E8E2' }}>Human-in-the-Loop:</strong> Requires your authorization before physical dispatch</span>
                   </div>
                 </div>
 

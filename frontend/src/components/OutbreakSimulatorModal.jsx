@@ -74,11 +74,27 @@ export default function OutbreakSimulatorModal({
             <div style={{ padding: '14px', borderRadius: '4px', backgroundColor: 'rgba(245, 158, 11, 0.15)', border: '1px solid rgba(245, 158, 11, 0.4)', fontFamily: 'var(--font-mono)' }}>
               <strong style={{ color: '#FFCB9A', fontSize: '13px' }}>⚠️ ACTIVE OUTBREAK SCENARIO: Dengue Surge (District B)</strong>
               <div style={{ marginTop: '8px', fontSize: '12px', color: '#bec8c8' }}>
-                • Consumption rate for ORS Packets &amp; Paracetamol increased by <strong style={{ color: '#FFCB9A' }}>3.2x</strong> at PHC 017 and PHC 055.
+                <strong style={{ color: '#D1E8E2' }}>SYSTEM IMPACT:</strong>
                 <br />
-                • Early-warning engine generated 3 critical stock-out alerts.
+                • Patient footfall increased by <strong>+3.2x</strong> at PHC 017 and PHC 055
                 <br />
-                • SciPy optimization engine calculated redistribution transfers from PHC 042 &amp; PHC 062.
+                • Medicine demand (ORS, Paracetamol) surged beyond safety thresholds
+                <br />
+                • Bed occupancy rose to critical levels (88-92%)
+                <br />
+                <strong>PREDICTED RISKS:</strong>
+                <br />
+                • 3 PHCs at critical stock-out risk within 2-3 days
+                <br />
+                • 2 medicines projected to breach safety buffers
+                <br />
+                <strong>AI RESPONSE:</strong>
+                <br />
+                • Early-warning engine generated 3 critical alerts
+                <br />
+                • SciPy optimizer calculated 3 redistribution recommendations
+                <br />
+                • Projected resilience improvement: +15% after transfers
               </div>
             </div>
           ) : (

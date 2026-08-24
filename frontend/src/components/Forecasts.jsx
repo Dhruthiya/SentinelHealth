@@ -113,28 +113,8 @@ export default function Forecasts({ timeSeriesData, phcs }) {
         </div>
       </div>
 
-      {/* Model Performance Statistics Bar */}
+      {/* Operational Forecast Summary */}
       <div className="grid-4">
-        <div className="sh-card tech-glow-hover" style={{ padding: '16px 18px', borderLeft: '4px solid #116466' }}>
-          <div className="sh-card-subtitle" style={{ textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>MODEL EVALUATION METRIC</div>
-          <div style={{ fontSize: '22px', fontWeight: '700', color: '#8cd3d4', marginTop: '4px', fontFamily: 'var(--font-title)' }} className="text-glow">
-            MAE: 3.42 <span style={{ fontSize: '11px', color: '#bec8c8', fontWeight: '400', fontFamily: 'var(--font-mono)' }}>units</span>
-          </div>
-          <div style={{ fontSize: '11px', color: '#6EE7B7', marginTop: '6px', fontWeight: '500', fontFamily: 'var(--font-mono)' }}>
-            -34% Error vs Prophet baseline
-          </div>
-        </div>
-
-        <div className="sh-card tech-glow-hover" style={{ padding: '16px 18px', borderLeft: '4px solid #D9B08C' }}>
-          <div className="sh-card-subtitle" style={{ textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>ROOT MEAN SQUARED ERROR</div>
-          <div style={{ fontSize: '22px', fontWeight: '700', color: '#D9B08C', marginTop: '4px', fontFamily: 'var(--font-title)' }} className="text-glow-gold">
-            RMSE: 4.81 <span style={{ fontSize: '11px', color: '#bec8c8', fontWeight: '400', fontFamily: 'var(--font-mono)' }}>units</span>
-          </div>
-          <div style={{ fontSize: '11px', color: '#bec8c8', marginTop: '6px', fontFamily: 'var(--font-mono)' }}>
-            Low variance across 30 days
-          </div>
-        </div>
-
         <div className="sh-card tech-glow-hover" style={{ padding: '16px 18px', borderLeft: '4px solid #EF4444' }}>
           <div className="sh-card-subtitle" style={{ textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>PREDICTED STOCK-OUT DATE</div>
           <div style={{ fontSize: '22px', fontWeight: '700', color: '#FF7B7B', marginTop: '4px', fontFamily: 'var(--font-title)' }} className="text-glow">
@@ -142,6 +122,26 @@ export default function Forecasts({ timeSeriesData, phcs }) {
           </div>
           <div style={{ fontSize: '11px', color: '#FF9E9E', marginTop: '6px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px', fontFamily: 'var(--font-mono)' }}>
             <AlertTriangle size={12} /> Critical shortage in 2.4 days
+          </div>
+        </div>
+
+        <div className="sh-card tech-glow-hover" style={{ padding: '16px 18px', borderLeft: '4px solid #D9B08C' }}>
+          <div className="sh-card-subtitle" style={{ textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>FORECASTED DEMAND</div>
+          <div style={{ fontSize: '22px', fontWeight: '700', color: '#D1E8E2', marginTop: '4px', fontFamily: 'var(--font-title)' }}>
+            +127 <span style={{ fontSize: '11px', color: '#bec8c8', fontWeight: '400', fontFamily: 'var(--font-mono)' }}>units/week</span>
+          </div>
+          <div style={{ fontSize: '11px', color: '#FFCB9A', marginTop: '6px', fontWeight: '500', fontFamily: 'var(--font-mono)' }}>
+            +27% increase vs baseline
+          </div>
+        </div>
+
+        <div className="sh-card tech-glow-hover" style={{ padding: '16px 18px', borderLeft: '4px solid #F59E0B' }}>
+          <div className="sh-card-subtitle" style={{ textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>WHY DEMAND CHANGING</div>
+          <div style={{ fontSize: '16px', fontWeight: '700', color: '#D1E8E2', marginTop: '4px', fontFamily: 'var(--font-title)' }}>
+            Patient footfall spike
+          </div>
+          <div style={{ fontSize: '11px', color: '#bec8c8', marginTop: '6px', fontFamily: 'var(--font-mono)' }}>
+            Dengue outbreak cluster (District B)
           </div>
         </div>
 
@@ -153,6 +153,33 @@ export default function Forecasts({ timeSeriesData, phcs }) {
           <div style={{ fontSize: '11px', color: '#bec8c8', marginTop: '6px', fontFamily: 'var(--font-mono)' }}>
             Collaborative BRICS weights
           </div>
+        </div>
+      </div>
+
+      {/* Technical Model Metrics (Secondary) */}
+      <div className="grid-3">
+        <div className="sh-card" style={{ padding: '12px 16px', backgroundColor: '#0d1512' }}>
+          <div className="sh-card-subtitle" style={{ fontFamily: 'var(--font-mono)' }}>MODEL MAE</div>
+          <div style={{ fontSize: '16px', fontWeight: '600', color: '#D1E8E2', marginTop: '2px', fontFamily: 'var(--font-title)' }}>
+            3.42 units
+          </div>
+          <div style={{ fontSize: '10px', color: '#6EE7B7', fontFamily: 'var(--font-mono)' }}>-34% vs baseline</div>
+        </div>
+
+        <div className="sh-card" style={{ padding: '12px 16px', backgroundColor: '#0d1512' }}>
+          <div className="sh-card-subtitle" style={{ fontFamily: 'var(--font-mono)' }}>MODEL RMSE</div>
+          <div style={{ fontSize: '16px', fontWeight: '600', color: '#D1E8E2', marginTop: '2px', fontFamily: 'var(--font-title)' }}>
+            4.81 units
+          </div>
+          <div style={{ fontSize: '10px', color: '#bec8c8', fontFamily: 'var(--font-mono)' }}>Low variance</div>
+        </div>
+
+        <div className="sh-card" style={{ padding: '12px 16px', backgroundColor: '#0d1512' }}>
+          <div className="sh-card-subtitle" style={{ fontFamily: 'var(--font-mono)' }}>CONFIDENCE INTERVAL</div>
+          <div style={{ fontSize: '16px', fontWeight: '600', color: '#D1E8E2', marginTop: '2px', fontFamily: 'var(--font-title)' }}>
+            95%
+          </div>
+          <div style={{ fontSize: '10px', color: '#bec8c8', fontFamily: 'var(--font-mono)' }}>Statistical bounds</div>
         </div>
       </div>
 
