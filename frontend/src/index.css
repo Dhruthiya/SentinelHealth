@@ -465,9 +465,119 @@ h1, h2, h3, h4, h5, h6 {
   animation: fadeIn 0.3s ease-out forwards;
 }
 
+/* Minimal utility compatibility for classes carried over from the AI Studio reference.
+   This project does not use Tailwind, so these keep responsive UI behavior intact. */
+.hidden {
+  display: none !important;
+}
+
+.relative {
+  position: relative;
+}
+
+.flex {
+  display: flex;
+}
+
+.inline {
+  display: inline;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.select-none {
+  user-select: none;
+}
+
+.cursor-grab {
+  cursor: grab;
+}
+
+.active\:cursor-grabbing:active {
+  cursor: grabbing;
+}
+
+.transition-transform {
+  transition-property: transform;
+}
+
+.transition-colors {
+  transition-property: color, background-color, border-color;
+}
+
+.duration-700 {
+  transition-duration: 700ms;
+}
+
+.w-64 {
+  width: 16rem;
+}
+
+.h-64 {
+  height: 16rem;
+}
+
+.hover\:underline:hover {
+  text-decoration: underline;
+}
+
+.hover\:text-\[\#8cd3d4\]:hover {
+  color: #8cd3d4 !important;
+}
+
+.hover\:border-\[\#116466\]\/40:hover {
+  border-color: rgba(17, 100, 102, 0.4) !important;
+}
+
 /* Responsive Breakpoints */
 @media (max-width: 1280px) {
   .grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 640px) {
+  .sm\:flex {
+    display: flex !important;
+  }
+
+  .sm\:inline {
+    display: inline !important;
+  }
+
+  .sm\:w-80 {
+    width: 20rem;
+  }
+
+  .sm\:h-80 {
+    height: 20rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .md\:flex {
+    display: flex !important;
+  }
+
+  .md\:inline {
+    display: inline !important;
+  }
+
+  .md\:hidden {
+    display: none !important;
+  }
+
+  .md\:w-96 {
+    width: 24rem;
+  }
+
+  .md\:h-96 {
+    height: 24rem;
+  }
 }
 
 @media (max-width: 900px) {
@@ -476,6 +586,45 @@ h1, h2, h3, h4, h5, h6 {
   .content-area { padding: 16px; }
 }
 
+@media (min-width: 1024px) {
+  .lg\:flex {
+    display: flex !important;
+  }
+
+  .lg\:inline-flex {
+    display: inline-flex !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  .xl\:flex {
+    display: flex !important;
+  }
+}
+
 @media (max-width: 640px) {
   .grid-2, .grid-4 { grid-template-columns: 1fr; }
+
+  .app-container {
+    width: 100%;
+  }
+
+  .sh-card {
+    padding: 16px;
+  }
+
+  .sh-card-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn {
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .badge {
+    white-space: normal;
+  }
 }
