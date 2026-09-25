@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import SolarinCore3D from './SolarinCore3D';
 import { 
   ResponsiveContainer, 
   ComposedChart, 
@@ -23,7 +22,6 @@ import {
   ArrowRight, 
   RefreshCw, 
   Layers,
-  Radio,
   Filter
 } from 'lucide-react';
 
@@ -37,7 +35,6 @@ export default function SolarinIntelligenceEngine({
   outbreakActive 
 }) {
   const [isSynchronizing, setIsSynchronizing] = useState(false);
-  const [syncProgress, setSyncProgress] = useState(0);
   const [selectedHorizon, setSelectedHorizon] = useState(14);
   const [selectedFacility, setSelectedFacility] = useState('ALL');
 
@@ -48,18 +45,10 @@ export default function SolarinIntelligenceEngine({
   const handleTriggerSync = () => {
     if (isSynchronizing) return;
     setIsSynchronizing(true);
-    setSyncProgress(0);
 
-    const interval = setInterval(() => {
-      setSyncProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setIsSynchronizing(false);
-          return 100;
-        }
-        return prev + 12;
-      });
-    }, 150);
+    setTimeout(() => {
+      setIsSynchronizing(false);
+    }, 1200);
   };
 
   const filteredPhcs = selectedFacility === 'ALL' 
@@ -120,118 +109,11 @@ export default function SolarinIntelligenceEngine({
         </div>
       </div>
 
-      {/* Main Split: 3D Core Visualizer HUD (Left) + Active Predictions & Insights (Right) */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '24px' }}>
+      {/* Active AI Predictions, Risk Radar & Insights */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', width: '100%' }}>
         
-        {/* Left: 3D Solarin Core Telemetry Visualizer */}
-        <div 
-          className="sh-card tech-glow" 
-          style={{ 
-            display: 'flex', 
-            flexDirection: 'column', 
-            justifyContent: 'space-between',
-            position: 'relative',
-            overflow: 'hidden',
-            backgroundColor: 'rgba(13, 21, 18, 0.95)',
-            border: '1px solid rgba(17, 100, 102, 0.5)'
-          }}
-        >
-          {/* Header */}
-          <div className="sh-card-header" style={{ marginBottom: '8px' }}>
-            <div className="sh-card-title" style={{ fontSize: '13px' }}>
-              <Radio size={16} color="#8cd3d4" />
-              <span>SOLARIN 3D NEURAL CORE TELEMETRY</span>
-            </div>
-            <span className="badge badge-info" style={{ fontSize: '9px' }}>
-              {isSynchronizing ? 'SYNCING 120HZ' : 'TELEMETRY LOCKED'}
-            </span>
-          </div>
-
-          {/* 3D Visualizer Canvas Frame */}
-          <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px 0', minHeight: '340px' }}>
-            {/* Background cyber grid */}
-            <div 
-              style={{
-                position: 'absolute',
-                inset: '20px',
-                borderRadius: '50%',
-                border: '1px dashed rgba(140, 211, 212, 0.2)',
-                animation: 'spin 40s linear infinite',
-                pointerEvents: 'none'
-              }}
-            />
-
-            {/* Three.js 3D Solarin Core */}
-            <SolarinCore3D isSynchronizing={isSynchronizing} />
-
-            {/* Sync Progress overlay */}
-            {isSynchronizing && (
-              <div 
-                style={{
-                  position: 'absolute',
-                  bottom: '10px',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  width: '240px',
-                  backgroundColor: 'rgba(13, 21, 18, 0.95)',
-                  border: '1px solid #116466',
-                  padding: '8px 12px',
-                  borderRadius: '4px',
-                  backdropFilter: 'blur(10px)',
-                  boxShadow: '0 0 20px rgba(17, 100, 102, 0.6)'
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', fontFamily: 'var(--font-mono)', color: '#8cd3d4', marginBottom: '4px' }}>
-                  <span>OPTIMIZING WEIGHT MATRIX...</span>
-                  <span>{syncProgress}%</span>
-                </div>
-                <div className="progress-bar-bg">
-                  <div
-                    className="progress-bar-fill"
-                    style={{ width: `${syncProgress}%`, backgroundColor: '#8cd3d4' }}
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Live Core Telemetry Instrumentation Ticker */}
-          <div 
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
-              gap: '8px',
-              padding: '12px',
-              backgroundColor: '#090E17',
-              border: '1px solid rgba(17, 100, 102, 0.3)',
-              borderRadius: '4px',
-              marginTop: '12px'
-            }}
-          >
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '9px', fontFamily: 'var(--font-mono)', color: '#899393' }}>LATENCY</div>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: '#8cd3d4', fontFamily: 'var(--font-title)' }}>0.08 ms</div>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '9px', fontFamily: 'var(--font-mono)', color: '#899393' }}>STABILITY</div>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: '#6EE7B7', fontFamily: 'var(--font-title)' }}>99.98%</div>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '9px', fontFamily: 'var(--font-mono)', color: '#899393' }}>SGD LOSS</div>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: '#D9B08C', fontFamily: 'var(--font-title)' }}>0.0412</div>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '9px', fontFamily: 'var(--font-mono)', color: '#899393' }}>CONSENSUS</div>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: '#D1E8E2', fontFamily: 'var(--font-title)' }}>3/3 Nodes</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Right: Active AI Predictions, Risk Radar & Insights */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          
-          {/* Prediction Status Quadrant */}
-          <div className="grid-2" style={{ gap: '14px' }}>
+        {/* Prediction Status Quadrant */}
+        <div className="grid-4" style={{ gap: '14px' }}>
             
             {/* Tile 1: Shortage Horizon */}
             <div className="sh-card tech-glow-hover" style={{ padding: '16px', borderLeft: '4px solid #EF4444' }}>
@@ -367,10 +249,7 @@ export default function SolarinIntelligenceEngine({
               </div>
             </div>
           </div>
-
         </div>
-
-      </div>
 
       {/* Middle Section: Live AI Demand Curve & Multi-Horizon Inference */}
       <div className="sh-card" style={{ height: '480px', display: 'flex', flexDirection: 'column' }}>

@@ -1,5 +1,6 @@
 /* SentinelHealth — Dark Futuristic Premium AI Design System */
 @import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300..900;1,300..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Sora:wght@100..800&display=swap');
+@import "leaflet/dist/leaflet.css";
 
 :root {
   /* Color Palette (Theme Specification) */
@@ -628,3 +629,97 @@ h1, h2, h3, h4, h5, h6 {
     white-space: normal;
   }
 }
+
+/* Leaflet Dark Command-Center Theme Overrides */
+.leaflet-container {
+  background-color: #090e17 !important;
+  font-family: var(--font-family) !important;
+  z-index: 1;
+}
+
+.leaflet-control-zoom {
+  border: 1px solid rgba(17, 100, 102, 0.5) !important;
+  border-radius: 4px !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
+}
+
+.leaflet-control-zoom a {
+  background-color: rgba(13, 21, 18, 0.95) !important;
+  color: #D1E8E2 !important;
+  border-bottom: 1px solid rgba(17, 100, 102, 0.4) !important;
+  transition: all 0.2s ease !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background-color: #116466 !important;
+  color: #FFFFFF !important;
+}
+
+.leaflet-control-attribution {
+  background: rgba(13, 21, 18, 0.85) !important;
+  color: #899393 !important;
+  font-size: 9px !important;
+  font-family: var(--font-mono) !important;
+  padding: 2px 8px !important;
+  border-top-left-radius: 4px !important;
+}
+
+.leaflet-control-attribution a {
+  color: #8cd3d4 !important;
+  text-decoration: none !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: rgba(13, 21, 18, 0.98) !important;
+  color: #D1E8E2 !important;
+  border: 1px solid rgba(17, 100, 102, 0.6) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), 0 0 20px rgba(17, 100, 102, 0.25) !important;
+  border-radius: 8px !important;
+  backdrop-filter: blur(16px) !important;
+  padding: 0 !important;
+}
+
+.leaflet-popup-content {
+  margin: 14px 16px !important;
+  line-height: 1.4 !important;
+  min-width: 270px !important;
+  max-width: 340px !important;
+}
+
+.leaflet-popup-tip {
+  background: #0d1512 !important;
+  border: 1px solid rgba(17, 100, 102, 0.6) !important;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  color: #bec8c8 !important;
+  padding: 8px 8px 0 0 !important;
+  font-size: 16px !important;
+}
+
+.leaflet-container a.leaflet-popup-close-button:hover {
+  color: #FF7B7B !important;
+}
+
+.hospital-marker-pin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.hospital-marker-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #FFFFFF;
+  box-shadow: 0 0 14px currentColor;
+  transition: transform 0.2s ease;
+}
+
+.hospital-marker-badge:hover {
+  transform: scale(1.15);
+}
+
