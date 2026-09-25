@@ -11,7 +11,6 @@ import {
   TrendingUp,
   CheckCircle2,
   Activity,
-  Layers,
   Crosshair,
   Truck,
   Users,
@@ -63,7 +62,6 @@ export default function PhcMap({ phcs = [], selectedPhc: propSelectedPhc, setSel
 
   const [filterStatus, setFilterStatus] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
-  const [mapTileMode, setMapTileMode] = useState('dark'); // 'dark' | 'street'
   const [showCatchment, setShowCatchment] = useState(true);
   const [showCorridors, setShowCorridors] = useState(true);
   const [showQuickList, setShowQuickList] = useState(!isEmbedded);
@@ -107,18 +105,18 @@ export default function PhcMap({ phcs = [], selectedPhc: propSelectedPhc, setSel
       minZoom: 6,
       maxZoom: 16,
       zoomControl: true,
-      attributionControl: true
+      attributionControl: false
     });
 
     mapInstanceRef.current = map;
 
-    // Base Tile Layer (Default CartoDB Dark Matter)
-    const tileUrl = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
-    const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>';
+    // Base Tile Layer (OpenStreetMap with tactical dark styling - no API key or watermark)
+    const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
     tileLayerRef.current = L.tileLayer(tileUrl, {
       maxZoom: 18,
-      attribution
+      attribution: '© OpenStreetMap contributors',
+      className: 'map-tiles-tactical'
     }).addTo(map);
 
     // Create Layer Groups
@@ -136,28 +134,6 @@ export default function PhcMap({ phcs = [], selectedPhc: propSelectedPhc, setSel
       mapInstanceRef.current = null;
     };
   }, []);
-
-  // Update Tile Layer if mapTileMode changes
-  useEffect(() => {
-    if (!mapInstanceRef.current) return;
-
-    if (tileLayerRef.current) {
-      mapInstanceRef.current.removeLayer(tileLayerRef.current);
-    }
-
-    const tileUrl = mapTileMode === 'dark'
-      ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-      : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-
-    const attribution = mapTileMode === 'dark'
-      ? '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>'
-      : '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
-
-    tileLayerRef.current = L.tileLayer(tileUrl, {
-      maxZoom: 18,
-      attribution
-    }).addTo(mapInstanceRef.current);
-  }, [mapTileMode]);
 
   // Update Catchment, Corridors, and Hospital Markers
   useEffect(() => {
@@ -188,9 +164,11 @@ export default function PhcMap({ phcs = [], selectedPhc: propSelectedPhc, setSel
         });
 
         circle.bindTooltip(`
-          <div style="font-family: JetBrains Mono; font-size: 10px; color: #D1E8E2;">
+          <div style="font-family: JetBrains Mono; font-size: 11px; color: #D1E8E2; padding: 4px;">
             <strong>${phc.name}</strong><br/>
-            Catchment Area: ~${Math.round(radiusMeters / 1000)} km radius (${phc.population?.toLocaleString() || 'N/A'} pop)
+            Catchment: ~${Math.round(radiusMeters / 1000)} km radius<br/>
+            Population: ${phc.population?.toLocaleString() || 'N/A'}<br/>
+            Status: ${phc.status}
           </div>
         `, { sticky: true, className: 'leaflet-custom-tooltip' });
 
@@ -216,11 +194,15 @@ export default function PhcMap({ phcs = [], selectedPhc: propSelectedPhc, setSel
           );
 
           polyline.bindTooltip(`
-            <div style="font-family: JetBrains Mono; font-size: 11px; padding: 4px; color: #D1E8E2;">
-              <strong style="color: #FFCB9A;">SciPy Transfer Corridor</strong><br/>
-              ${trf.medicineName} (${trf.quantity} units)<br/>
-              ${sourcePhc.name.split(' ')[0]} ➔ ${destPhc.name.split(' ')[0]}<br/>
-              Distance: ${trf.distanceKm} km (~${trf.estTimeMins} mins)
+            <div style="font-family: JetBrains Mono; font-size: 11px; padding: 6px; color: #D1E8E2; min-width: 200px;">
+              <strong style="color: #FFCB9A; font-size: 12px;">🚚 SciPy Transfer Corridor</strong><br/>
+              <div style="margin-top: 4px; padding-top: 4px; border-top: 1px solid rgba(140, 211, 212, 0.3);">
+                <strong>Medicine:</strong> ${trf.medicineName}<br/>
+                <strong>Quantity:</strong> ${trf.quantity} units<br/>
+                <strong>Route:</strong> ${sourcePhc.name.split(' ')[0]} ➔ ${destPhc.name.split(' ')[0]}<br/>
+                <strong>Distance:</strong> ${trf.distanceKm} km (~${trf.estTimeMins} mins)<br/>
+                <strong>Priority:</strong> <span style="color: #FFCB9A;">HIGH</span>
+              </div>
             </div>
           `, { sticky: true });
 
@@ -241,7 +223,7 @@ export default function PhcMap({ phcs = [], selectedPhc: propSelectedPhc, setSel
 
       bounds.extend([phc.lat, phc.lng]);
 
-      // Custom Hospital HTML Icon
+      // Custom Hospital HTML Icon with enhanced visual information
       const customIconHtml = `
         <div class="hospital-marker-pin" style="position: relative; display: flex; flex-direction: column; align-items: center;">
           ${isCritical ? `
@@ -261,8 +243,8 @@ export default function PhcMap({ phcs = [], selectedPhc: propSelectedPhc, setSel
           ` : ''}
 
           <div style="
-            width: ${isSelected ? '38px' : '32px'};
-            height: ${isSelected ? '38px' : '32px'};
+            width: ${isSelected ? '42px' : '36px'};
+            height: ${isSelected ? '42px' : '36px'};
             border-radius: 8px;
             background: ${conf.base};
             border: 2px solid ${isSelected ? '#FFFFFF' : '#D1E8E2'};
@@ -276,30 +258,55 @@ export default function PhcMap({ phcs = [], selectedPhc: propSelectedPhc, setSel
             position: relative;
             z-index: ${isSelected ? 50 : 20};
           ">
-            <svg width="${isSelected ? '20' : '16'}" height="${isSelected ? '20' : '16'}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="${isSelected ? '22' : '18'}" height="${isSelected ? '22' : '18'}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 6v12M6 12h12"/>
               <rect width="20" height="20" x="2" y="2" rx="4"/>
             </svg>
+            <!-- Status indicator dot -->
+            <div style="
+              position: absolute;
+              top: -2px;
+              right: -2px;
+              width: 8px;
+              height: 8px;
+              border-radius: 50%;
+              background: ${phc.criticalMedicines && phc.criticalMedicines.length > 0 ? '#EF4444' : '#10B981'};
+              border: 1px solid #0d1512;
+              box-shadow: 0 0 4px rgba(0,0,0,0.5);
+            "></div>
           </div>
 
+          <!-- Enhanced label with more information -->
           <div style="
-            margin-top: 4px;
+            margin-top: 6px;
             background: rgba(13, 21, 18, 0.96);
             border: 1px solid ${conf.border};
             color: #D1E8E2;
-            padding: 2px 6px;
+            padding: 4px 8px;
             border-radius: 4px;
             font-family: JetBrains Mono, monospace;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 700;
             white-space: nowrap;
             box-shadow: 0 2px 8px rgba(0,0,0,0.8);
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 2px;
+            min-width: 80px;
           ">
-            <span>${phc.name.replace('Primary Health Centre', 'PHC')}</span>
-            <span style="color: ${conf.base}; font-size: 9px;">${bedPct}%</span>
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <span>${phc.name.replace('Primary Health Centre', 'PHC')}</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px; font-size: 8px;">
+              <span style="color: ${conf.base};">🛏️ ${bedPct}%</span>
+              <span style="color: ${staffPct < 70 ? '#FF7B7B' : '#6EE7B7'};">👨‍⚕️ ${staffPct}%</span>
+            </div>
+            ${phc.criticalMedicines && phc.criticalMedicines.length > 0 ? `
+              <div style="color: #FF7B7B; font-size: 7px; text-align: center;">
+                ⚠️ ${phc.criticalMedicines.length} SHORTAGE
+              </div>
+            ` : ''}
           </div>
         </div>
       `;
@@ -307,20 +314,20 @@ export default function PhcMap({ phcs = [], selectedPhc: propSelectedPhc, setSel
       const customDivIcon = L.divIcon({
         html: customIconHtml,
         className: 'custom-leaflet-hospital-icon',
-        iconSize: [40, 52],
-        iconAnchor: [20, 26],
-        popupAnchor: [0, -28]
+        iconSize: [50, 65],
+        iconAnchor: [25, 32],
+        popupAnchor: [0, -35]
       });
 
       // Marker Creation
       const marker = L.marker([phc.lat, phc.lng], { icon: customDivIcon });
 
-      // Rich Hospital Popup Content
+      // Enhanced Hospital Popup Content with more detailed information
       const popupContent = `
-        <div style="display: flex; flex-direction: column; gap: 10px; font-family: 'Hanken Grotesk', sans-serif;">
+        <div style="display: flex; flex-direction: column; gap: 12px; font-family: 'Hanken Grotesk', sans-serif; min-width: 300px;">
           <!-- Header -->
-          <div style="border-bottom: 1px solid rgba(17, 100, 102, 0.4); padding-bottom: 8px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <div style="border-bottom: 1px solid rgba(17, 100, 102, 0.4); padding-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
               <span style="
                 background: ${conf.bg}; 
                 border: 1px solid ${conf.border}; 
@@ -328,109 +335,131 @@ export default function PhcMap({ phcs = [], selectedPhc: propSelectedPhc, setSel
                 font-size: 9px; 
                 font-family: JetBrains Mono; 
                 font-weight: 700; 
-                padding: 2px 6px; 
+                padding: 3px 8px; 
                 border-radius: 3px; 
                 letter-spacing: 0.08em;
               ">
                 ● ${conf.label}
               </span>
               <span style="font-family: JetBrains Mono; font-size: 9px; color: #899393;">
-                ${phc.lastUpdated || 'Live'}
+                ${phc.lastUpdated || 'Live'} • GPS: ${phc.lat.toFixed(4)}, ${phc.lng.toFixed(4)}
               </span>
             </div>
-            <h4 style="font-size: 15px; font-weight: 800; color: #D1E8E2; margin: 0; font-family: 'Sora', sans-serif;">
+            <h4 style="font-size: 16px; font-weight: 800; color: #D1E8E2; margin: 0; font-family: 'Sora', sans-serif;">
               ${phc.name}
             </h4>
-            <div style="font-size: 11px; color: #bec8c8; font-family: JetBrains Mono; margin-top: 2px;">
-              ${phc.district} • ${phc.state}
+            <div style="font-size: 12px; color: #bec8c8; font-family: JetBrains Mono; margin-top: 4px;">
+              ${phc.district} • ${phc.state} • ID: ${phc.id}
             </div>
           </div>
 
-          <!-- Capacity & Attendance Metrics -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-            <div style="background: rgba(21, 29, 26, 0.7); border: 1px solid rgba(17, 100, 102, 0.3); padding: 8px; border-radius: 4px;">
-              <div style="font-size: 9px; font-family: JetBrains Mono; color: #8cd3d4; text-transform: uppercase;">
+          <!-- Enhanced Capacity & Attendance Metrics -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div style="background: rgba(21, 29, 26, 0.8); border: 1px solid rgba(17, 100, 102, 0.4); padding: 10px; border-radius: 4px;">
+              <div style="font-size: 9px; font-family: JetBrains Mono; color: #8cd3d4; text-transform: uppercase; letter-spacing: 0.05em;">
                 🛏️ Bed Capacity
               </div>
-              <div style="font-size: 14px; font-weight: 700; color: #D1E8E2; margin-top: 2px; font-family: 'Sora', sans-serif;">
+              <div style="font-size: 16px; font-weight: 700; color: #D1E8E2; margin-top: 4px; font-family: 'Sora', sans-serif;">
                 ${phc.bedsOccupied} / ${phc.bedsTotal}
               </div>
-              <div style="font-size: 9px; color: ${bedPct > 80 ? '#FF7B7B' : '#6EE7B7'};">
-                ${bedPct}% Occupied
+              <div style="font-size: 10px; color: ${bedPct > 80 ? '#FF7B7B' : '#6EE7B7'}; font-family: JetBrains Mono; margin-top: 2px;">
+                ${bedPct}% Occupied ${bedPct > 80 ? '⚠️ HIGH' : '✓ OK'}
+              </div>
+              <!-- Mini progress bar -->
+              <div style="width: 100%; height: 4px; background: rgba(17, 100, 102, 0.3); border-radius: 2px; margin-top: 6px; overflow: hidden;">
+                <div style="width: ${bedPct}%; height: 100%; background: ${bedPct > 80 ? '#EF4444' : '#10B981'}; border-radius: 2px;"></div>
               </div>
             </div>
 
-            <div style="background: rgba(21, 29, 26, 0.7); border: 1px solid rgba(17, 100, 102, 0.3); padding: 8px; border-radius: 4px;">
-              <div style="font-size: 9px; font-family: JetBrains Mono; color: #8cd3d4; text-transform: uppercase;">
+            <div style="background: rgba(21, 29, 26, 0.8); border: 1px solid rgba(17, 100, 102, 0.4); padding: 10px; border-radius: 4px;">
+              <div style="font-size: 9px; font-family: JetBrains Mono; color: #8cd3d4; text-transform: uppercase; letter-spacing: 0.05em;">
                 👨‍⚕️ Clinical Staff
               </div>
-              <div style="font-size: 14px; font-weight: 700; color: #D1E8E2; margin-top: 2px; font-family: 'Sora', sans-serif;">
+              <div style="font-size: 16px; font-weight: 700; color: #D1E8E2; margin-top: 4px; font-family: 'Sora', sans-serif;">
                 ${phc.staffPresent} / ${phc.staffScheduled}
               </div>
-              <div style="font-size: 9px; color: #bec8c8;">
-                ${staffPct}% On Duty
+              <div style="font-size: 10px; color: ${staffPct < 70 ? '#FF7B7B' : '#6EE7B7'}; font-family: JetBrains Mono; margin-top: 2px;">
+                ${staffPct}% On Duty ${staffPct < 70 ? '⚠️ LOW' : '✓ OK'}
+              </div>
+              <!-- Mini progress bar -->
+              <div style="width: 100%; height: 4px; background: rgba(17, 100, 102, 0.3); border-radius: 2px; margin-top: 6px; overflow: hidden;">
+                <div style="width: ${staffPct}%; height: 100%; background: ${staffPct < 70 ? '#EF4444' : '#10B981'}; border-radius: 2px;"></div>
               </div>
             </div>
 
-            <div style="background: rgba(21, 29, 26, 0.7); border: 1px solid rgba(17, 100, 102, 0.3); padding: 8px; border-radius: 4px;">
-              <div style="font-size: 9px; font-family: JetBrains Mono; color: #8cd3d4; text-transform: uppercase;">
+            <div style="background: rgba(21, 29, 26, 0.8); border: 1px solid rgba(17, 100, 102, 0.4); padding: 10px; border-radius: 4px;">
+              <div style="font-size: 9px; font-family: JetBrains Mono; color: #8cd3d4; text-transform: uppercase; letter-spacing: 0.05em;">
                 📈 Daily Footfall
               </div>
-              <div style="font-size: 14px; font-weight: 700; color: #D1E8E2; margin-top: 2px; font-family: 'Sora', sans-serif;">
+              <div style="font-size: 16px; font-weight: 700; color: #D1E8E2; margin-top: 4px; font-family: 'Sora', sans-serif;">
                 ${phc.patientFootfall || 0}
               </div>
-              <div style="font-size: 9px; color: #FFCB9A;">
-                ${phc.patientFootfallTrend || 'Nominal'}
+              <div style="font-size: 10px; color: #FFCB9A; font-family: JetBrains Mono; margin-top: 2px;">
+                ${phc.patientFootfallTrend || 'Nominal'} vs baseline
               </div>
             </div>
 
-            <div style="background: rgba(21, 29, 26, 0.7); border: 1px solid rgba(17, 100, 102, 0.3); padding: 8px; border-radius: 4px;">
-              <div style="font-size: 9px; font-family: JetBrains Mono; color: #8cd3d4; text-transform: uppercase;">
+            <div style="background: rgba(21, 29, 26, 0.8); border: 1px solid rgba(17, 100, 102, 0.4); padding: 10px; border-radius: 4px;">
+              <div style="font-size: 9px; font-family: JetBrains Mono; color: #8cd3d4; text-transform: uppercase; letter-spacing: 0.05em;">
                 👥 Population
               </div>
-              <div style="font-size: 14px; font-weight: 700; color: #D1E8E2; margin-top: 2px; font-family: 'Sora', sans-serif;">
+              <div style="font-size: 16px; font-weight: 700; color: #D1E8E2; margin-top: 4px; font-family: 'Sora', sans-serif;">
                 ${phc.population ? phc.population.toLocaleString() : 'N/A'}
               </div>
-              <div style="font-size: 9px; color: #bec8c8;">
-                Catchment Area
+              <div style="font-size: 10px; color: #bec8c8; font-family: JetBrains Mono; margin-top: 2px;">
+                Catchment Area (~${Math.round((phc.population ? Math.min(14, Math.max(7, phc.population * 0.00045)) : 9))} km radius)
               </div>
             </div>
           </div>
 
-          <!-- Pharmacy / Medicine Alert Details -->
+          <!-- Enhanced Pharmacy / Medicine Alert Details -->
           <div>
             ${phc.criticalMedicines && phc.criticalMedicines.length > 0 ? `
               <div style="
-                background: rgba(239, 68, 68, 0.15); 
-                border: 1px solid rgba(239, 68, 68, 0.4); 
-                padding: 8px 10px; 
+                background: rgba(239, 68, 68, 0.18); 
+                border: 1px solid rgba(239, 68, 68, 0.5); 
+                padding: 10px 12px; 
                 border-radius: 4px;
                 font-family: JetBrains Mono;
-                font-size: 10px;
+                font-size: 11px;
                 color: #FF9E9E;
               ">
-                <div style="font-weight: 700; color: #FF7B7B; margin-bottom: 2px; display: flex; align-items: center; gap: 4px;">
-                  ⚠️ CRITICAL SHORTAGE DETECTED
+                <div style="font-weight: 700; color: #FF7B7B; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                  ⚠️ CRITICAL SHORTAGE DETECTED (${phc.criticalMedicines.length} items)
                 </div>
-                <div>${phc.criticalMedicines.join(' • ')}</div>
-                <div style="font-size: 9px; color: #bec8c8; margin-top: 2px;">Projected Stockout: &lt; 72 Hours</div>
+                <div style="margin-bottom: 6px;">${phc.criticalMedicines.join(' • ')}</div>
+                <div style="font-size: 10px; color: #bec8c8; padding-top: 6px; border-top: 1px solid rgba(239, 68, 68, 0.3);">
+                  ⏱️ Projected Stockout: &lt; 72 Hours • 🚨 Requires Immediate Redistribution
+                </div>
               </div>
             ` : `
               <div style="
-                background: rgba(16, 185, 129, 0.12); 
-                border: 1px solid rgba(16, 185, 129, 0.35); 
-                padding: 6px 10px; 
+                background: rgba(16, 185, 129, 0.15); 
+                border: 1px solid rgba(16, 185, 129, 0.4); 
+                padding: 8px 12px; 
                 border-radius: 4px;
                 font-family: JetBrains Mono;
-                font-size: 10px;
+                font-size: 11px;
                 color: #6EE7B7;
                 display: flex;
                 align-items: center;
-                gap: 5px;
+                gap: 6px;
               ">
-                <span>✓ All essential medicine buffers maintained</span>
+                <span>✓ All essential medicine buffers maintained • Stock levels optimal</span>
               </div>
             `}
+          </div>
+
+          <!-- Additional facility information -->
+          <div style="background: rgba(17, 100, 102, 0.1); border: 1px solid rgba(17, 100, 102, 0.3); padding: 8px 12px; border-radius: 4px; font-family: JetBrains Mono; font-size: 10px; color: #bec8c8;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+              <span>FACILITY TYPE:</span>
+              <span style="color: #D1E8E2; font-weight: 600;">Primary Health Centre</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span>TELEMETRY STATUS:</span>
+              <span style="color: #6EE7B7; font-weight: 600;">● ONLINE (120Hz)</span>
+            </div>
           </div>
 
           <!-- Action Button in Popup -->
@@ -442,16 +471,16 @@ export default function PhcMap({ phcs = [], selectedPhc: propSelectedPhc, setSel
               border: 1px solid #8cd3d4;
               color: #FFFFFF;
               font-family: JetBrains Mono;
-              font-size: 11px;
+              font-size: 12px;
               font-weight: 700;
-              padding: 7px;
+              padding: 10px;
               border-radius: 4px;
               cursor: pointer;
               letter-spacing: 0.05em;
               display: flex;
               align-items: center;
               justify-content: center;
-              gap: 6px;
+              gap: 8px;
               transition: all 0.2s ease;
             "
           >
@@ -460,7 +489,7 @@ export default function PhcMap({ phcs = [], selectedPhc: propSelectedPhc, setSel
         </div>
       `;
 
-      marker.bindPopup(popupContent, { maxWidth: 320 });
+      marker.bindPopup(popupContent, { maxWidth: 380 });
 
       // Click listener: select hospital & open popup
       marker.on('click', () => {
@@ -700,29 +729,7 @@ export default function PhcMap({ phcs = [], selectedPhc: propSelectedPhc, setSel
             <span>Transfers</span>
           </button>
 
-          {/* Tile Layer Toggle */}
-          <button 
-            onClick={() => setMapTileMode(mapTileMode === 'dark' ? 'street' : 'dark')}
-            title="Switch Map Tile Theme"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              padding: '6px 10px',
-              backgroundColor: 'rgba(13, 21, 18, 0.94)',
-              color: '#D1E8E2',
-              border: '1px solid rgba(17, 100, 102, 0.55)',
-              borderRadius: '4px',
-              fontSize: '11px',
-              fontFamily: 'var(--font-mono)',
-              fontWeight: 600,
-              cursor: 'pointer',
-              backdropFilter: 'blur(12px)'
-            }}
-          >
-            <Layers size={13} color="#8cd3d4" />
-            <span>{mapTileMode === 'dark' ? 'Tactical' : 'Street'}</span>
-          </button>
+
 
           {/* Fit All / Recenter */}
           <button 

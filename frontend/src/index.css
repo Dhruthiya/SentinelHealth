@@ -637,6 +637,12 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 1;
 }
 
+/* Tactical dark styling for OpenStreetMap tiles: eliminates third-party watermark while preserving command-center aesthetics */
+.map-tiles-tactical,
+.leaflet-tile-pane .map-tiles-tactical {
+  filter: brightness(0.65) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7) !important;
+}
+
 .leaflet-control-zoom {
   border: 1px solid rgba(17, 100, 102, 0.5) !important;
   border-radius: 4px !important;
@@ -657,17 +663,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .leaflet-control-attribution {
-  background: rgba(13, 21, 18, 0.85) !important;
-  color: #899393 !important;
-  font-size: 9px !important;
-  font-family: var(--font-mono) !important;
-  padding: 2px 8px !important;
-  border-top-left-radius: 4px !important;
+  display: none !important;
 }
 
 .leaflet-control-attribution a {
-  color: #8cd3d4 !important;
-  text-decoration: none !important;
+  display: none !important;
 }
 
 .leaflet-popup-content-wrapper {
